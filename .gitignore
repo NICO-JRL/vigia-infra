@@ -1,0 +1,7 @@
+# never commit data, secrets, or OS junk
+*.sql
+*.db
+.env
+.DS_Store
+Thumbs.db
+node_modules/
