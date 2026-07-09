@@ -13,9 +13,11 @@
     --sans:'IBM Plex Sans',ui-sans-serif,system-ui,sans-serif;
     --mono:'DM Sans',ui-sans-serif,system-ui,sans-serif;
     --ink:#15212C;--ink2:#56636F;--ink3:#7E8B96;
-    --brand:#00457C;--brandBg:#EEF4FA;--brandTint:#D7E6F3;
+    --brand:#00457C;--brandBg:#EEF4FA;--brandTint:rgba(0,69,124,.16);
     --surface:#FFFFFF;--surface2:#F6F8FB;--line:#E4E9EE;
-    --gold:#2C7BE5;--goldOn:#8CC0F0;
+    /* palette consolidated: --brand (ribbon blue) is the only accent blue;
+       --gold now aliases it; --goldOn is a light label for the blue slogan band */
+    --gold:#00457C;--goldOn:rgba(255,255,255,.72);
     --seguro:#1AA44A;--alertaDot:#FBD453;--critico:#DF2225;
   }
   *{box-sizing:border-box}
@@ -24,55 +26,54 @@
   .container{max-width:1160px;margin:0 auto;padding:0 40px}
   .mono{font-family:var(--mono)}
 
-  /* utility bar */
-  .util{background:var(--ink);padding:9px 0}
-  .util .container{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.03em}
-  .util-l,.util-rep{color:rgba(255,255,255,.68)}
-  .util-r{display:flex;gap:16px;align-items:center}
-  .util-sep{width:1px;height:12px;background:rgba(255,255,255,.25)}
-  .util-r .es{color:#fff;font-weight:600}
-  .util-r .en{color:rgba(255,255,255,.45)}
-
-  /* header */
-  .header{background:var(--surface);border-bottom:1px solid var(--line)}
-  .header .container{padding:19px 40px;display:flex;justify-content:space-between;align-items:center}
-  .brand{display:flex;align-items:center;gap:14px;cursor:pointer;background:none;border:0;padding:0;color:inherit;text-align:left}
-  .logo{width:40px;height:40px;border-radius:8px;background:var(--brand);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12.5px;font-weight:700;color:#fff}
-  .brand-txt{display:flex;align-items:baseline;gap:11px}
-  .brand-name{font-family:var(--sans);font-size:22px;font-weight:600;letter-spacing:-.02em}
-  .brand-div{width:1px;height:16px;background:var(--line)}
-  .brand-tag{font-family:var(--sans);font-size:13px;color:var(--ink2)}
-  .nav{display:flex;align-items:center;gap:26px}
-  .nav-link{font-family:var(--sans);font-size:14px;cursor:pointer;padding:0 0 4px;border:0;border-bottom:2px solid transparent;background:none;font-weight:400;color:var(--ink2)}
-  .nav-link:hover{color:var(--ink)}
-  .nav-link.active{font-weight:600;color:var(--brand);border-bottom-color:var(--brand)}
-  .btn-ingresar{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--gold);background:var(--surface);border:1.5px solid var(--gold);padding:9px 19px;border-radius:999px;cursor:pointer}
-  .btn-ingresar:hover{background:var(--gold);color:#fff}
+  /* header — IICA ribbon (matches the Vigía Arroz tool masthead exactly) */
+  .header{position:sticky;top:0;z-index:50;background:var(--brand);border-bottom:1px solid rgba(255,255,255,.12)}
+  .header .container{padding:0 40px;min-height:64px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:9px;cursor:pointer;background:none;border:0;padding:8px 0;color:inherit;text-align:left}
+  .brand-logo{height:40px;width:auto;display:block}
+  .nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+  .nav-link{font-family:var(--sans);font-size:13.5px;cursor:pointer;padding:8px 12px;border:0;border-radius:8px;background:none;font-weight:500;color:rgba(255,255,255,.78);transition:color .15s,background .15s}
+  .nav-link:hover{color:#fff;background:rgba(255,255,255,.1)}
+  .nav-link.active{font-weight:600;color:#fff}
 
   /* content / tabs */
   .content{min-height:560px}
   .tab-panel{display:none}
   .tab-panel.active{display:block}
 
-  /* hero */
-  .hero{background:var(--surface);position:relative;overflow:hidden}
-  .hero .container{padding:70px 40px 60px;position:relative}
-  .hero-wm{position:absolute;top:30px;left:34px;font-family:var(--sans);font-size:154px;font-weight:700;letter-spacing:-.04em;color:#E9EEF3;line-height:.8;pointer-events:none;z-index:0}
-  .hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr 372px;gap:56px;align-items:center}
-  .hero-eyebrow{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--brand)}
-  .hero h1{font-family:var(--sans);font-size:42px;font-weight:600;letter-spacing:-.025em;line-height:1.12;margin:16px 0 0;max-width:640px}
-  .lead{font-family:var(--sans);font-size:18px;line-height:1.6;color:var(--ink2);max-width:560px;margin:20px 0 30px}
-  .btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:var(--sans);font-size:15px;font-weight:600;color:#fff;background:var(--brand);padding:14px 26px;border-radius:999px;cursor:pointer;border:0}
+  /* hero — institutional agency-portal treatment */
+  .hero{background:var(--surface);position:relative}
+  .hero .container{padding:0 40px}
+  .hero-inner{padding:42px 0 0;border-bottom:1px solid var(--line)}
+
+  /* leading-bar kicker */
+  .hero-top{padding-bottom:16px}
+  .hero-kicker{display:flex;align-items:center;gap:12px;min-height:32px}
+  .hero-kicker-bar{flex:none;width:3px;height:30px;background:var(--brand);border-radius:1px}
+  .hero-kicker-txt{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);line-height:1.35}
+
+  /* headline block */
+  .hero-body{padding:6px 0 46px}
+  .hero h1{font-family:var(--sans);font-size:42px;font-weight:600;letter-spacing:-.025em;line-height:1.12;margin:0;max-width:760px;color:var(--ink)}
+  .hero-rule{width:52px;height:2px;background:var(--gold);margin:22px 0 0}
+  .lead{font-family:var(--sans);font-size:18px;line-height:1.6;color:var(--ink2);max-width:620px;margin:22px 0 0}
+  .hero-actions{display:flex;align-items:center;gap:12px 24px;flex-wrap:wrap;margin-top:30px}
+
+  /* CTA (squared) + secondary text link */
+  .btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:var(--sans);font-size:15px;font-weight:600;color:#fff;background:var(--brand);padding:14px 26px;border-radius:6px;cursor:pointer;border:0}
   .btn-primary:hover{background:#003862}
-  .accesos{background:var(--ink);border-radius:18px;padding:26px 26px 20px;border-bottom:4px solid var(--gold);box-shadow:0 26px 55px -28px rgba(21,33,44,.65)}
-  .accesos-t{font-family:var(--sans);font-size:20px;font-weight:600;color:#fff;letter-spacing:-.01em}
-  .accesos-s{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:rgba(255,255,255,.6);margin-top:6px}
-  .accesos-list{margin-top:16px}
-  .accesos-item{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid rgba(255,255,255,.13);width:100%;background:none;border-left:0;border-right:0;border-bottom:0;text-align:left}
-  .accesos-item.link{cursor:pointer;transition:padding-left .15s}
-  .accesos-item.link:hover{padding-left:4px}
-  .accesos-item .arrow{font-family:var(--mono);font-weight:700;font-size:16px;color:var(--goldOn)}
-  .accesos-item .lbl{font-family:var(--sans);font-size:14.5px;color:rgba(255,255,255,.9)}
+  .btn-primary.hero-cta{border-radius:6px;padding:14px 24px}
+  .hero-link{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--brand);background:none;border:0;padding:8px 2px;cursor:pointer;position:relative;letter-spacing:-.005em}
+  .hero-link::after{content:"";position:absolute;left:2px;right:2px;bottom:4px;height:1px;background:var(--brandTint)}
+  .hero-link:hover{color:#003862}
+  .hero-link:hover::after{background:var(--brand)}
+
+  /* institutional meta strip — grounded facts only */
+  .hero-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0;border-top:1px solid var(--line)}
+  .hero-meta-item{padding:20px 28px 22px;border-left:1px solid var(--line)}
+  .hero-meta-item:first-child{padding-left:0;border-left:0}
+  .hero-meta dt{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin:0 0 7px}
+  .hero-meta dd{font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:-.005em;color:var(--ink);margin:0;line-height:1.4}
 
   /* Inicio — long-form content blocks */
   .blk{padding:60px 0;border-top:1px solid var(--line)}
@@ -83,8 +84,14 @@
   .blk p{font-family:var(--sans);font-size:16.5px;line-height:1.75;color:var(--ink2);max-width:760px;margin:0 0 18px}
   .blk p:last-of-type{margin-bottom:0}
   .blk strong{color:var(--ink);font-weight:600}
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
-  .chip{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--brand);background:var(--brandBg);border:1px solid var(--brandTint);padding:6px 13px;border-radius:999px}
+  /* flag marquee — países de la región SICA (auto-scroll, flags only) */
+  .flags-cap{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin:30px 0 15px}
+  .flag-marquee{position:relative;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%)}
+  .flag-track{display:flex;align-items:center;width:max-content;will-change:transform;animation:flag-scroll 40s linear infinite}
+  .flag-marquee:hover .flag-track{animation-play-state:paused}
+  .mflag{height:32px;width:auto;margin-right:24px;border-radius:4px;flex:none;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.07),0 1px 3px rgba(21,33,44,.14)}
+  @keyframes flag-scroll{to{transform:translateX(-50%)}}
+  @media(prefers-reduced-motion:reduce){.flag-track{animation:none}}
   .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:10px;margin-top:28px}
   .flow-step{flex:1 1 150px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
   .flow-step .n{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--gold);text-transform:uppercase}
@@ -97,13 +104,13 @@
   .wcard h3{font-family:var(--sans);font-size:15.5px;font-weight:600;color:var(--ink);margin:0 0 6px}
   .wcard p{font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--ink2);margin:0;max-width:none}
   .blk-btn{margin-top:26px}
-  .alianza{background:var(--ink);border-radius:18px;padding:36px 38px;border-bottom:4px solid var(--gold)}
-  .alianza .blk-eyebrow{color:var(--goldOn)}
-  .alianza h2{color:#fff}
-  .alianza p{color:rgba(255,255,255,.72)}
-  .alianza strong{color:#fff}
+  .alianza{background:var(--brandBg);border-radius:18px;padding:36px 38px;border-bottom:4px solid var(--brand)}
+  .alianza .blk-eyebrow{color:var(--brand)}
+  .alianza h2{color:var(--ink)}
+  .alianza p{color:var(--ink2)}
+  .alianza strong{color:var(--ink)}
   .partners{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px}
-  .partner{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.04em;color:#fff;border:1px solid rgba(255,255,255,.28);border-radius:8px;padding:10px 16px}
+  .partner{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--brand);background:var(--surface);border:1px solid rgba(0,69,124,.18);border-radius:8px;padding:10px 16px}
   .slogan{background:var(--brand);text-align:center;padding:46px 40px}
   .slogan .k{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--goldOn);margin-bottom:12px}
   .slogan p{font-family:var(--sans);font-size:26px;font-weight:600;font-style:italic;color:#fff;letter-spacing:-.01em;margin:0;max-width:none}
@@ -119,7 +126,7 @@
   .tool-badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--brand);margin-bottom:10px}
   .tool-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--brand)}
   .tool-name{font-family:var(--sans);font-size:26px;font-weight:600;letter-spacing:-.015em}
-  .btn-tool{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:14px;font-weight:600;color:#fff;background:var(--brand);padding:13px 22px;border-radius:999px;white-space:nowrap;cursor:pointer}
+  .btn-tool{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:14px;font-weight:600;color:#fff;background:var(--brand);padding:13px 22px;border-radius:6px;white-space:nowrap;cursor:pointer}
   .btn-tool:hover{background:#003862}
   .tool-desc{font-family:var(--sans);font-size:16px;line-height:1.6;color:var(--ink2);max-width:680px;margin:18px 0 0}
   .tool-sub{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
@@ -138,31 +145,34 @@
   .pill-prep{display:inline-block;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3);background:var(--surface2);border:1px solid var(--line);padding:7px 13px;border-radius:999px}
 
   /* footer */
-  .footer{background:var(--ink);color:rgba(255,255,255,.7)}
+  .footer{background:var(--surface);border-top:1px solid var(--line);color:var(--ink2)}
   .footer .container{padding:48px 40px 30px}
   .footer-grid{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:40px}
-  .footer-brand{font-family:var(--sans);font-size:22px;font-weight:600;letter-spacing:-.02em;color:#fff}
-  .footer-rule{width:34px;height:3px;background:var(--gold);margin:14px 0 0}
-  .footer-desc{font-family:var(--sans);font-size:13.5px;line-height:1.6;color:rgba(255,255,255,.6);max-width:360px;margin:16px 0 0}
-  .footer-h{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:#fff}
-  .footer-h-rule{width:26px;height:2px;background:var(--gold);margin:8px 0 15px}
-  .footer-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-family:var(--sans);font-size:13.5px;color:rgba(255,255,255,.72)}
+  .footer-brand{font-family:var(--sans);font-size:22px;font-weight:600;letter-spacing:-.02em;color:var(--ink)}
+  .footer-rule{width:34px;height:3px;background:var(--brand);margin:14px 0 0}
+  .footer-desc{font-family:var(--sans);font-size:13.5px;line-height:1.6;color:var(--ink2);max-width:360px;margin:16px 0 0}
+  .footer-h{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink)}
+  .footer-h-rule{width:26px;height:2px;background:var(--brand);margin:8px 0 15px}
+  .footer-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;font-family:var(--sans);font-size:13.5px;color:var(--ink2)}
   .footer-col a{cursor:pointer}
-  .footer-col a:hover{color:#fff}
-  .footer-soon,.footer-na{color:rgba(255,255,255,.4)}
-  .footer-soon::after{content:' · pronto';font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:rgba(255,255,255,.28);text-transform:uppercase}
-  .footer-copy{border-top:1px solid rgba(255,255,255,.14);margin-top:36px;padding-top:20px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:rgba(255,255,255,.5)}
-  .footer-bottom{background:#0B1219;padding:12px 0}
-  .footer-bottom .container{text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:rgba(255,255,255,.5)}
+  .footer-col a:hover{color:var(--brand)}
+  .footer-soon,.footer-na{color:var(--ink3)}
+  .footer-soon::after{content:' · pronto';font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--ink3);text-transform:uppercase}
+  .footer-copy{border-top:1px solid var(--line);margin-top:36px;padding-top:20px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--ink3)}
+  .footer-bottom{background:var(--surface2);border-top:1px solid var(--line);padding:12px 0}
+  .footer-bottom .container{text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--ink3)}
 
   @media(max-width:840px){
     .container{padding:0 22px}
-    .header .container{padding:16px 22px;flex-wrap:wrap;gap:12px}
-    .nav{gap:16px;flex-wrap:wrap}
-    .hero .container{padding:46px 22px 40px}
-    .hero-grid{grid-template-columns:1fr;gap:32px}
-    .hero-wm{font-size:92px;top:14px}
+    .header .container{padding:0 22px;min-height:60px;gap:6px 10px}
+    .brand-logo{height:36px}
+    .nav{gap:2px;flex-wrap:wrap}
+    .hero .container{padding:0 22px}
+    .hero-inner{padding:30px 0 0}
+    .hero-top{padding-bottom:14px}
+    .hero-body{padding:4px 0 34px}
     .hero h1{font-size:31px}
+    .hero-meta-item{padding:18px 20px 20px}
     .blk{padding:44px 0}
     .blk h2{font-size:25px}
     .cols3{grid-template-columns:1fr;gap:16px}
@@ -176,45 +186,30 @@
     .footer-grid{grid-template-columns:1fr 1fr;gap:30px}
   }
   @media(max-width:520px){
-    .util-l{display:none}
     .footer-grid{grid-template-columns:1fr}
     .hero h1{font-size:27px}
+    .hero-meta{grid-template-columns:1fr}
+    .hero-meta-item{padding:16px 0;border-left:0;border-top:1px solid var(--line)}
+    .hero-meta-item:first-child{border-top:0;padding-top:4px}
+    .hero-actions{gap:14px 20px}
     .flow-arrow{display:none}
-    .nav-link,.btn-ingresar{font-size:13px}
+    .nav-link{font-size:13px}
   }
 </style>
 </head>
 <body>
 
-<!-- ===== IICA utility bar ===== -->
-<div class="util">
-  <div class="container">
-    <span class="util-l">Instituto Interamericano de Cooperación para la Agricultura</span>
-    <span class="util-r">
-      <span class="util-rep">IICA + CAC / SE-CAC · Región SICA</span>
-      <span class="util-sep"></span>
-      <span><span class="es">ES</span> <span class="en">EN</span></span>
-    </span>
-  </div>
-</div>
-
-<!-- ===== masthead ===== -->
+<!-- ===== masthead — IICA ribbon (same as the Vigía Arroz tool) ===== -->
 <header class="header">
   <div class="container">
     <button class="brand" data-tab="inicio" aria-label="Vigía — Inicio">
-      <span class="logo">IICA</span>
-      <span class="brand-txt">
-        <span class="brand-name">Vigía</span>
-        <span class="brand-div"></span>
-        <span class="brand-tag">Vigilancia inteligente regional</span>
-      </span>
+      <img class="brand-logo" src="iica-vigia.png" alt="IICA · Vigía" />
     </button>
     <nav class="nav">
       <button class="nav-link active" data-tab="inicio">Inicio</button>
       <button class="nav-link" data-tab="herramientas">Herramientas</button>
       <button class="nav-link" data-tab="metodologia">Metodología</button>
       <button class="nav-link" data-tab="fuentes">Fuentes</button>
-      <button class="btn-ingresar" type="button">Ingresar</button>
     </nav>
   </div>
 </header>
@@ -227,24 +222,40 @@
     <!-- hero / encabezado -->
     <div class="hero">
       <div class="container">
-        <div class="hero-wm" aria-hidden="true">Vigía</div>
-        <div class="hero-grid">
-          <div>
-            <div class="hero-eyebrow">IICA + CAC / SE-CAC · Región SICA</div>
-            <h1>El sistema de vigilancia inteligente para la agricultura de Centroamérica y República Dominicana</h1>
-            <p class="lead">Una vigilancia permanente y basada en datos verificados sobre la producción agrícola y pecuaria y la seguridad alimentaria de la región — para ver a tiempo y decidir a tiempo.</p>
-            <button class="btn-primary" data-tab="herramientas" type="button">Explorar las herramientas <span class="mono">→</span></button>
-          </div>
-          <div class="accesos">
-            <div class="accesos-t">Accesos directos</div>
-            <div class="accesos-s">Encuentra rápido lo que ofrece el observatorio.</div>
-            <div class="accesos-list">
-              <button class="accesos-item link" data-tab="herramientas" type="button"><span class="arrow">›</span><span class="lbl">Explorar herramientas</span></button>
-              <button class="accesos-item link" data-tab="metodologia" type="button"><span class="arrow">›</span><span class="lbl">Metodología</span></button>
-              <button class="accesos-item link" data-tab="fuentes" type="button"><span class="arrow">›</span><span class="lbl">Fuentes de datos</span></button>
-              <div class="accesos-item"><span class="arrow">›</span><span class="lbl">Directorio · IICA</span></div>
+        <div class="hero-inner">
+
+          <div class="hero-top">
+            <div class="hero-kicker">
+              <span class="hero-kicker-bar" aria-hidden="true"></span>
+              <span class="hero-kicker-txt">Observatorio regional</span>
             </div>
           </div>
+
+          <div class="hero-body">
+            <h1>El sistema de vigilancia inteligente para la agricultura de Centroamérica y República Dominicana</h1>
+            <div class="hero-rule" aria-hidden="true"></div>
+            <p class="lead">Una vigilancia permanente y basada en datos verificados sobre la producción agrícola y pecuaria y la seguridad alimentaria de la región — para ver a tiempo y decidir a tiempo.</p>
+            <div class="hero-actions">
+              <button class="btn-primary hero-cta" data-tab="herramientas" type="button">Explorar las herramientas <span class="mono" aria-hidden="true">→</span></button>
+              <button class="hero-link" data-tab="metodologia" type="button">Conocer la metodología</button>
+            </div>
+          </div>
+
+          <dl class="hero-meta">
+            <div class="hero-meta-item">
+              <dt>Alianza</dt>
+              <dd>IICA · CAC / SE-CAC</dd>
+            </div>
+            <div class="hero-meta-item">
+              <dt>Alcance</dt>
+              <dd>Región SICA — Centroamérica y Rep. Dominicana</dd>
+            </div>
+            <div class="hero-meta-item">
+              <dt>Principio</dt>
+              <dd>Datos verificados · Temperatura cero</dd>
+            </div>
+          </dl>
+
         </div>
       </div>
     </div>
@@ -258,8 +269,11 @@
         <p>Un <strong>vigía</strong> es quien observa desde un punto alto para anticipar lo que se aproxima —una tormenta, una oportunidad, un riesgo— y dar aviso a tiempo para que otros puedan actuar. Ese es, literalmente, el propósito de esta plataforma: poner a disposición de los Ministerios y Secretarías de Agricultura de la región SICA una vigilancia permanente, basada en datos verificados, sobre el estado y la evolución de la producción agrícola y pecuaria y de la seguridad alimentaria.</p>
         <p><strong>Vigía</strong> es la plataforma digital que el <strong>IICA</strong>, en alianza con el <strong>Consejo Agropecuario Centroamericano (CAC)</strong> a través de su Secretaría Ejecutiva (<strong>SE-CAC</strong>), pone gradualmente a disposición de los países de la región.</p>
         <p>No es un reporte estático ni un tablero decorativo. Vigía integra datos oficiales de cada país —producción, comercio, clima, mercados— con inteligencia artificial y métodos estadísticos robustos, para producir una lectura clara y verificable del panorama agroalimentario regional: qué está pasando, qué tan severo es, y qué ventana de tiempo tienen las autoridades para actuar antes de que una alerta se convierta en crisis.</p>
-        <div class="chips" aria-label="Países de la región SICA">
-          <span class="chip">Guatemala</span><span class="chip">Belice</span><span class="chip">El Salvador</span><span class="chip">Honduras</span><span class="chip">Nicaragua</span><span class="chip">Costa Rica</span><span class="chip">Panamá</span><span class="chip">República Dominicana</span>
+        <div class="flags-cap">8 países de la región SICA</div>
+        <div class="flag-marquee" role="img" aria-label="Banderas de los ocho países de la región SICA: Guatemala, Belice, El Salvador, Honduras, Nicaragua, Costa Rica, Panamá y República Dominicana">
+          <div class="flag-track" aria-hidden="true">
+            <img class="mflag" src="flags/gt.png" alt=""><img class="mflag" src="flags/bz.png" alt=""><img class="mflag" src="flags/sv.png" alt=""><img class="mflag" src="flags/hn.png" alt=""><img class="mflag" src="flags/ni.png" alt=""><img class="mflag" src="flags/cr.png" alt=""><img class="mflag" src="flags/pa.png" alt=""><img class="mflag" src="flags/do.png" alt=""><img class="mflag" src="flags/gt.png" alt=""><img class="mflag" src="flags/bz.png" alt=""><img class="mflag" src="flags/sv.png" alt=""><img class="mflag" src="flags/hn.png" alt=""><img class="mflag" src="flags/ni.png" alt=""><img class="mflag" src="flags/cr.png" alt=""><img class="mflag" src="flags/pa.png" alt=""><img class="mflag" src="flags/do.png" alt=""><img class="mflag" src="flags/gt.png" alt=""><img class="mflag" src="flags/bz.png" alt=""><img class="mflag" src="flags/sv.png" alt=""><img class="mflag" src="flags/hn.png" alt=""><img class="mflag" src="flags/ni.png" alt=""><img class="mflag" src="flags/cr.png" alt=""><img class="mflag" src="flags/pa.png" alt=""><img class="mflag" src="flags/do.png" alt=""><img class="mflag" src="flags/gt.png" alt=""><img class="mflag" src="flags/bz.png" alt=""><img class="mflag" src="flags/sv.png" alt=""><img class="mflag" src="flags/hn.png" alt=""><img class="mflag" src="flags/ni.png" alt=""><img class="mflag" src="flags/cr.png" alt=""><img class="mflag" src="flags/pa.png" alt=""><img class="mflag" src="flags/do.png" alt="">
+          </div>
         </div>
       </div>
     </div>
