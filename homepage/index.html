@@ -15,26 +15,57 @@
     --ink:#15212C;--ink2:#56636F;--ink3:#7E8B96;
     --brand:#00457C;--brandBg:#EEF4FA;--brandTint:rgba(0,69,124,.16);
     --surface:#FFFFFF;--surface2:#F6F8FB;--line:#E4E9EE;
-    /* palette consolidated: --brand (ribbon blue) is the only accent blue;
-       --gold now aliases it; --goldOn is a light label for the blue slogan band */
-    --gold:#00457C;--goldOn:rgba(255,255,255,.72);
+    /* --brand (ribbon blue) is the only accent blue; --gold aliases it.
+       --bar is the constant blue for the ribbon/slogan/buttons (never changes). */
+    --gold:#00457C;--goldOn:rgba(255,255,255,.72);--bar:#00457C;--soon:'pronto';
     --seguro:#1AA44A;--alertaDot:#FBD453;--critico:#DF2225;
   }
+  /* dark theme — surfaces darken, accents lighten for contrast; the ribbon,
+     slogan and buttons keep --bar (#00457C). Flags keep their own colors. */
+  :root[data-theme="dark"]{
+    --ink:#E8EDF2;--ink2:#A7B2BD;--ink3:#7C8894;
+    --brand:#5AA2E6;--brandBg:#16283A;--brandTint:rgba(255,255,255,.16);
+    --surface:#0F1720;--surface2:#16212C;--line:#28343F;
+    --gold:#5AA2E6;
+  }
+  :root[data-theme="dark"] .doc-wm{color:#18242F}
+  :root[data-theme="dark"] .subnav{border-top-color:rgba(255,255,255,.06)}
   *{box-sizing:border-box}
   body{margin:0;background:var(--surface);font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
   a{color:inherit;text-decoration:none}
   .container{max-width:1160px;margin:0 auto;padding:0 40px}
   .mono{font-family:var(--mono)}
 
-  /* header — IICA ribbon (matches the Vigía Arroz tool masthead exactly) */
-  .header{position:sticky;top:0;z-index:50;background:var(--brand);border-bottom:1px solid rgba(255,255,255,.12)}
-  .header .container{padding:0 40px;min-height:64px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+  /* header — two-tier: blue brand bar + subtle section-nav ribbon (org style) */
+  .header{background:var(--bar);box-shadow:0 3px 8px -3px rgba(21,33,44,.22)}
+  .header .container{padding:0 40px;min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
   .brand{display:flex;align-items:center;gap:9px;cursor:pointer;background:none;border:0;padding:8px 0;color:inherit;text-align:left}
-  .brand-logo{height:40px;width:auto;display:block}
-  .nav{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-  .nav-link{font-family:var(--sans);font-size:13.5px;cursor:pointer;padding:8px 12px;border:0;border-radius:8px;background:none;font-weight:500;color:rgba(255,255,255,.78);transition:color .15s,background .15s}
-  .nav-link:hover{color:#fff;background:rgba(255,255,255,.1)}
-  .nav-link.active{font-weight:600;color:#fff}
+  .brand-logo{height:38px;width:auto;display:block}
+  /* utility cluster on the right of the blue brand bar */
+  .header-utils{display:flex;align-items:center;gap:3px}
+  .util-lang{display:inline-flex;align-items:center;gap:5px;font-family:var(--sans);font-size:13.5px;font-weight:500;color:rgba(255,255,255,.9);background:none;border:0;cursor:pointer;padding:7px 10px;border-radius:6px;transition:background .15s,color .15s}
+  .util-lang:hover{background:rgba(255,255,255,.12);color:#fff}
+  .util-icon{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;color:rgba(255,255,255,.85);background:none;border:0;border-radius:8px;cursor:pointer;transition:background .15s,color .15s}
+  .util-icon:hover{background:rgba(255,255,255,.12);color:#fff}
+  .util-icon svg{width:18px;height:18px;display:block}
+  .util-icon .icon-sun{display:none}
+  :root[data-theme="dark"] .util-icon .icon-moon{display:none}
+  :root[data-theme="dark"] .util-icon .icon-sun{display:block}
+  /* language dropdown */
+  .lang-select{position:relative}
+  .lang-menu{position:absolute;top:calc(100% + 8px);right:0;min-width:158px;background:var(--surface);border:1px solid var(--line);border-radius:9px;box-shadow:0 14px 34px -12px rgba(21,33,44,.4);padding:5px;z-index:60}
+  .lang-menu[hidden]{display:none}
+  .lang-menu button{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;font-family:var(--sans);font-size:13.5px;font-weight:500;color:var(--ink);background:none;border:0;border-radius:6px;padding:9px 11px;cursor:pointer;text-align:left}
+  .lang-menu button:hover{background:var(--surface2)}
+  .lang-menu button[aria-current="true"]{color:var(--brand);font-weight:600}
+  .lang-menu button[aria-current="true"]::after{content:"";flex:none;width:15px;height:15px;background:currentColor;-webkit-mask:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'/></svg>") center/contain no-repeat;mask:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'/></svg>") center/contain no-repeat}
+  /* subtle section-nav ribbon — sits below the blue bar, sticks to the top on scroll */
+  .subnav{position:sticky;top:0;z-index:50;background:var(--brandBg);border-top:1px solid rgba(255,255,255,.5);border-bottom:1px solid var(--line);box-shadow:0 1px 2px rgba(21,33,44,.05)}
+  .subnav .container{padding:0 40px;min-height:48px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .nav-link{position:relative;font-family:var(--sans);font-size:13.5px;cursor:pointer;padding:15px 14px;border:0;background:none;font-weight:500;color:var(--ink2);transition:color .15s}
+  .nav-link:hover{color:var(--ink)}
+  .nav-link.active{color:var(--brand);font-weight:600}
+  .nav-link.active::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2px;background:var(--brand)}
 
   /* content / tabs */
   .content{min-height:560px}
@@ -42,38 +73,37 @@
   .tab-panel.active{display:block}
 
   /* hero — institutional agency-portal treatment */
-  .hero{background:var(--surface);position:relative}
-  .hero .container{padding:0 40px}
-  .hero-inner{padding:42px 0 0;border-bottom:1px solid var(--line)}
+  /* hero — full-bleed background carousel with a blue scrim + white text over it */
+  .hero{position:relative;overflow:hidden;background:#0a2338}
+  .hero-bg{position:absolute;inset:0;z-index:0}
+  .hero-bg .slide{position:absolute;inset:0;margin:0;opacity:0;transition:opacity 1s ease}
+  .hero-bg .slide.is-active{opacity:1}
+  .hero-bg .slide img{width:100%;height:100%;object-fit:cover;display:block}
+  .hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(6,26,45,.93) 0%,rgba(6,26,45,.74) 46%,rgba(6,26,45,.42) 100%),linear-gradient(0deg,rgba(6,26,45,.5),rgba(6,26,45,0) 24%)}
+  .hero .container{position:relative;z-index:2;padding:100px 40px 108px}
+  .hero-copy{max-width:660px;text-shadow:0 1px 22px rgba(2,12,22,.34)}
 
   /* leading-bar kicker */
-  .hero-top{padding-bottom:16px}
   .hero-kicker{display:flex;align-items:center;gap:12px;min-height:32px}
-  .hero-kicker-bar{flex:none;width:3px;height:30px;background:var(--brand);border-radius:1px}
-  .hero-kicker-txt{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--brand);line-height:1.35}
+  .hero-kicker-bar{flex:none;width:3px;height:30px;background:#fff;border-radius:1px}
+  .hero-kicker-txt{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.92);line-height:1.35}
 
-  /* headline block */
-  .hero-body{padding:6px 0 46px}
-  .hero h1{font-family:var(--sans);font-size:42px;font-weight:600;letter-spacing:-.025em;line-height:1.12;margin:0;max-width:760px;color:var(--ink)}
-  .hero-rule{width:52px;height:2px;background:var(--gold);margin:22px 0 0}
-  .lead{font-family:var(--sans);font-size:18px;line-height:1.6;color:var(--ink2);max-width:620px;margin:22px 0 0}
-  .hero-actions{display:flex;align-items:center;gap:12px 24px;flex-wrap:wrap;margin-top:30px}
+  /* headline over the image */
+  .hero h1{font-family:var(--sans);font-size:44px;font-weight:600;letter-spacing:-.025em;line-height:1.12;margin:18px 0 0;max-width:none;color:#fff}
+  .hero-rule{width:52px;height:2px;background:rgba(255,255,255,.8);margin:24px 0 0}
+  .lead{font-family:var(--sans);font-size:18px;line-height:1.6;color:rgba(255,255,255,.9);max-width:600px;margin:22px 0 0}
+  .hero-actions{display:flex;align-items:center;gap:12px 26px;flex-wrap:wrap;margin-top:32px}
+
 
   /* CTA (squared) + secondary text link */
-  .btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:var(--sans);font-size:15px;font-weight:600;color:#fff;background:var(--brand);padding:14px 26px;border-radius:6px;cursor:pointer;border:0}
+  .btn-primary{display:inline-flex;align-items:center;gap:10px;font-family:var(--sans);font-size:15px;font-weight:600;color:#fff;background:var(--bar);padding:14px 26px;border-radius:6px;cursor:pointer;border:0}
   .btn-primary:hover{background:#003862}
   .btn-primary.hero-cta{border-radius:6px;padding:14px 24px}
-  .hero-link{font-family:var(--sans);font-size:15px;font-weight:600;color:var(--brand);background:none;border:0;padding:8px 2px;cursor:pointer;position:relative;letter-spacing:-.005em}
-  .hero-link::after{content:"";position:absolute;left:2px;right:2px;bottom:4px;height:1px;background:var(--brandTint)}
-  .hero-link:hover{color:#003862}
-  .hero-link:hover::after{background:var(--brand)}
+  .hero-link{font-family:var(--sans);font-size:15px;font-weight:600;color:#fff;background:none;border:0;padding:8px 2px;cursor:pointer;position:relative;letter-spacing:-.005em}
+  .hero-link::after{content:"";position:absolute;left:2px;right:2px;bottom:4px;height:1px;background:rgba(255,255,255,.55)}
+  .hero-link:hover{color:#fff}
+  .hero-link:hover::after{background:#fff}
 
-  /* institutional meta strip — grounded facts only */
-  .hero-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0;border-top:1px solid var(--line)}
-  .hero-meta-item{padding:20px 28px 22px;border-left:1px solid var(--line)}
-  .hero-meta-item:first-child{padding-left:0;border-left:0}
-  .hero-meta dt{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);margin:0 0 7px}
-  .hero-meta dd{font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:-.005em;color:var(--ink);margin:0;line-height:1.4}
 
   /* Inicio — long-form content blocks */
   .blk{padding:60px 0;border-top:1px solid var(--line)}
@@ -111,7 +141,7 @@
   .alianza strong{color:var(--ink)}
   .partners{display:flex;gap:14px;flex-wrap:wrap;margin-top:24px}
   .partner{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--brand);background:var(--surface);border:1px solid rgba(0,69,124,.18);border-radius:8px;padding:10px 16px}
-  .slogan{background:var(--brand);text-align:center;padding:46px 40px}
+  .slogan{background:var(--bar);text-align:center;padding:46px 40px}
   .slogan .k{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--goldOn);margin-bottom:12px}
   .slogan p{font-family:var(--sans);font-size:26px;font-weight:600;font-style:italic;color:#fff;letter-spacing:-.01em;margin:0;max-width:none}
 
@@ -126,7 +156,7 @@
   .tool-badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--brand);margin-bottom:10px}
   .tool-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--brand)}
   .tool-name{font-family:var(--sans);font-size:26px;font-weight:600;letter-spacing:-.015em}
-  .btn-tool{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:14px;font-weight:600;color:#fff;background:var(--brand);padding:13px 22px;border-radius:6px;white-space:nowrap;cursor:pointer}
+  .btn-tool{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:14px;font-weight:600;color:#fff;background:var(--bar);padding:13px 22px;border-radius:6px;white-space:nowrap;cursor:pointer}
   .btn-tool:hover{background:#003862}
   .tool-desc{font-family:var(--sans);font-size:16px;line-height:1.6;color:var(--ink2);max-width:680px;margin:18px 0 0}
   .tool-sub{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
@@ -157,22 +187,22 @@
   .footer-col a{cursor:pointer}
   .footer-col a:hover{color:var(--brand)}
   .footer-soon,.footer-na{color:var(--ink3)}
-  .footer-soon::after{content:' · pronto';font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--ink3);text-transform:uppercase}
+  .footer-soon::after{content:' · ' var(--soon);font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--ink3);text-transform:uppercase}
   .footer-copy{border-top:1px solid var(--line);margin-top:36px;padding-top:20px;font-family:var(--mono);font-size:11px;letter-spacing:.02em;color:var(--ink3)}
   .footer-bottom{background:var(--surface2);border-top:1px solid var(--line);padding:12px 0}
   .footer-bottom .container{text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--ink3)}
 
   @media(max-width:840px){
     .container{padding:0 22px}
-    .header .container{padding:0 22px;min-height:60px;gap:6px 10px}
-    .brand-logo{height:36px}
-    .nav{gap:2px;flex-wrap:wrap}
-    .hero .container{padding:0 22px}
-    .hero-inner{padding:30px 0 0}
-    .hero-top{padding-bottom:14px}
-    .hero-body{padding:4px 0 34px}
+    .header .container{padding:0 22px;min-height:52px}
+    .brand-logo{height:34px}
+    .subnav .container{padding:0 22px;min-height:42px}
+    .nav-link{padding:12px 10px;font-size:13px}
+    .hero .container{padding:64px 22px 78px}
+    .hero-scrim{background:linear-gradient(180deg,rgba(6,26,45,.66),rgba(6,26,45,.9))}
+    .hero-copy{max-width:none}
     .hero h1{font-size:31px}
-    .hero-meta-item{padding:18px 20px 20px}
+    .lead{max-width:none}
     .blk{padding:44px 0}
     .blk h2{font-size:25px}
     .cols3{grid-template-columns:1fr;gap:16px}
@@ -188,14 +218,13 @@
   @media(max-width:520px){
     .footer-grid{grid-template-columns:1fr}
     .hero h1{font-size:27px}
-    .hero-meta{grid-template-columns:1fr}
-    .hero-meta-item{padding:16px 0;border-left:0;border-top:1px solid var(--line)}
-    .hero-meta-item:first-child{border-top:0;padding-top:4px}
     .hero-actions{gap:14px 20px}
     .flow-arrow{display:none}
     .nav-link{font-size:13px}
+    .lang-select{display:none}
   }
 </style>
+<script>(function(){try{var t=localStorage.getItem('vigia-theme')||((window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light');document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
 </head>
 <body>
 
@@ -205,14 +234,30 @@
     <button class="brand" data-tab="inicio" aria-label="Vigía — Inicio">
       <img class="brand-logo" src="iica-vigia.png" alt="IICA · Vigía" />
     </button>
-    <nav class="nav">
-      <button class="nav-link active" data-tab="inicio">Inicio</button>
-      <button class="nav-link" data-tab="herramientas">Herramientas</button>
-      <button class="nav-link" data-tab="metodologia">Metodología</button>
-      <button class="nav-link" data-tab="fuentes">Fuentes</button>
-    </nav>
+    <div class="header-utils">
+      <div class="lang-select">
+        <button class="util-lang" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false" aria-label="Idioma"><span data-lang-label>Español</span></button>
+        <div class="lang-menu" role="menu" hidden>
+          <button type="button" role="menuitem" data-set-lang="es">Español</button>
+          <button type="button" role="menuitem" data-set-lang="en">English</button>
+        </div>
+      </div>
+      <button class="util-icon" type="button" data-theme-toggle aria-label="Cambiar tema claro / oscuro" title="Tema claro / oscuro">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="util-icon" type="button" aria-label="Compartir" title="Compartir" data-share><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+    </div>
   </div>
 </header>
+<nav class="subnav" aria-label="Secciones del observatorio">
+  <div class="container">
+    <button class="nav-link active" data-tab="inicio" data-i18n="nav.inicio">Inicio</button>
+    <button class="nav-link" data-tab="herramientas" data-i18n="nav.herramientas">Herramientas</button>
+    <button class="nav-link" data-tab="metodologia" data-i18n="nav.metodologia">Metodología</button>
+    <button class="nav-link" data-tab="fuentes" data-i18n="nav.fuentes">Fuentes</button>
+  </div>
+</nav>
 
 <main class="content">
 
@@ -221,41 +266,25 @@
 
     <!-- hero / encabezado -->
     <div class="hero">
+      <div class="hero-bg" aria-hidden="true">
+        <figure class="slide is-active"><img src="hero-arroz.webp" alt="" loading="eager"></figure>
+        <figure class="slide"><img src="hero-maiz.webp" alt="" loading="eager"></figure>
+        <figure class="slide"><img src="hero-frijol.webp" alt="" loading="eager"></figure>
+      </div>
+      <div class="hero-scrim" aria-hidden="true"></div>
       <div class="container">
-        <div class="hero-inner">
-
-          <div class="hero-top">
-            <div class="hero-kicker">
-              <span class="hero-kicker-bar" aria-hidden="true"></span>
-              <span class="hero-kicker-txt">Observatorio regional</span>
-            </div>
+        <div class="hero-copy">
+          <div class="hero-kicker">
+            <span class="hero-kicker-bar" aria-hidden="true"></span>
+            <span class="hero-kicker-txt" data-i18n="hero.kicker">Observatorio regional</span>
           </div>
-
-          <div class="hero-body">
-            <h1>El sistema de vigilancia inteligente para la agricultura de Centroamérica y República Dominicana</h1>
-            <div class="hero-rule" aria-hidden="true"></div>
-            <p class="lead">Una vigilancia permanente y basada en datos verificados sobre la producción agrícola y pecuaria y la seguridad alimentaria de la región — para ver a tiempo y decidir a tiempo.</p>
-            <div class="hero-actions">
-              <button class="btn-primary hero-cta" data-tab="herramientas" type="button">Explorar las herramientas <span class="mono" aria-hidden="true">→</span></button>
-              <button class="hero-link" data-tab="metodologia" type="button">Conocer la metodología</button>
-            </div>
+          <h1 data-i18n="hero.h1">El sistema de vigilancia inteligente para la agricultura de Centroamérica y República Dominicana</h1>
+          <div class="hero-rule" aria-hidden="true"></div>
+          <p class="lead" data-i18n="hero.lead">Vigilancia permanente, basada en datos verificados, de la producción agropecuaria y la seguridad alimentaria de la región — para ver a tiempo y decidir a tiempo.</p>
+          <div class="hero-actions">
+            <button class="btn-primary hero-cta" data-tab="herramientas" type="button"><span data-i18n="hero.cta">Explorar las herramientas</span> <span class="mono" aria-hidden="true">→</span></button>
+            <button class="hero-link" data-tab="metodologia" type="button" data-i18n="hero.secondary">Conocer la metodología</button>
           </div>
-
-          <dl class="hero-meta">
-            <div class="hero-meta-item">
-              <dt>Alianza</dt>
-              <dd>IICA · CAC / SE-CAC</dd>
-            </div>
-            <div class="hero-meta-item">
-              <dt>Alcance</dt>
-              <dd>Región SICA — Centroamérica y Rep. Dominicana</dd>
-            </div>
-            <div class="hero-meta-item">
-              <dt>Principio</dt>
-              <dd>Datos verificados · Temperatura cero</dd>
-            </div>
-          </dl>
-
         </div>
       </div>
     </div>
@@ -263,13 +292,13 @@
     <!-- Bloque 1 — ¿Qué es Vigía? -->
     <div class="blk">
       <div class="container">
-        <div class="blk-eyebrow">El observatorio</div>
-        <h2>¿Qué es Vigía?</h2>
+        <div class="blk-eyebrow" data-i18n="b1.eyebrow">El observatorio</div>
+        <h2 data-i18n="b1.h2">¿Qué es Vigía?</h2>
         <div class="blk-rule"></div>
-        <p>Un <strong>vigía</strong> es quien observa desde un punto alto para anticipar lo que se aproxima —una tormenta, una oportunidad, un riesgo— y dar aviso a tiempo para que otros puedan actuar. Ese es, literalmente, el propósito de esta plataforma: poner a disposición de los Ministerios y Secretarías de Agricultura de la región SICA una vigilancia permanente, basada en datos verificados, sobre el estado y la evolución de la producción agrícola y pecuaria y de la seguridad alimentaria.</p>
-        <p><strong>Vigía</strong> es la plataforma digital que el <strong>IICA</strong>, en alianza con el <strong>Consejo Agropecuario Centroamericano (CAC)</strong> a través de su Secretaría Ejecutiva (<strong>SE-CAC</strong>), pone gradualmente a disposición de los países de la región.</p>
-        <p>No es un reporte estático ni un tablero decorativo. Vigía integra datos oficiales de cada país —producción, comercio, clima, mercados— con inteligencia artificial y métodos estadísticos robustos, para producir una lectura clara y verificable del panorama agroalimentario regional: qué está pasando, qué tan severo es, y qué ventana de tiempo tienen las autoridades para actuar antes de que una alerta se convierta en crisis.</p>
-        <div class="flags-cap">8 países de la región SICA</div>
+        <p data-i18n-html="b1.p1">Un <strong>vigía</strong> es quien observa desde un punto alto para anticipar lo que se aproxima —una tormenta, una oportunidad, un riesgo— y dar aviso a tiempo para que otros puedan actuar. Ese es, literalmente, el propósito de esta plataforma: poner a disposición de los Ministerios y Secretarías de Agricultura de la región SICA una vigilancia permanente, basada en datos verificados, sobre el estado y la evolución de la producción agrícola y pecuaria y de la seguridad alimentaria.</p>
+        <p data-i18n-html="b1.p2"><strong>Vigía</strong> es la plataforma digital que el <strong>IICA</strong>, en alianza con el <strong>Consejo Agropecuario Centroamericano (CAC)</strong> a través de su Secretaría Ejecutiva (<strong>SE-CAC</strong>), pone gradualmente a disposición de los países de la región.</p>
+        <p data-i18n="b1.p3">No es un reporte estático ni un tablero decorativo. Vigía integra datos oficiales de cada país —producción, comercio, clima, mercados— con inteligencia artificial y métodos estadísticos robustos, para producir una lectura clara y verificable del panorama agroalimentario regional: qué está pasando, qué tan severo es, y qué ventana de tiempo tienen las autoridades para actuar antes de que una alerta se convierta en crisis.</p>
+        <div class="flags-cap" data-i18n="flags.cap">8 países de la región SICA</div>
         <div class="flag-marquee" role="img" aria-label="Banderas de los ocho países de la región SICA: Guatemala, Belice, El Salvador, Honduras, Nicaragua, Costa Rica, Panamá y República Dominicana">
           <div class="flag-track" aria-hidden="true">
             <img class="mflag" src="flags/gt.png" alt=""><img class="mflag" src="flags/bz.png" alt=""><img class="mflag" src="flags/sv.png" alt=""><img class="mflag" src="flags/hn.png" alt=""><img class="mflag" src="flags/ni.png" alt=""><img class="mflag" src="flags/cr.png" alt=""><img class="mflag" src="flags/pa.png" alt=""><img class="mflag" src="flags/do.png" alt=""><img class="mflag" src="flags/gt.png" alt=""><img class="mflag" src="flags/bz.png" alt=""><img class="mflag" src="flags/sv.png" alt=""><img class="mflag" src="flags/hn.png" alt=""><img class="mflag" src="flags/ni.png" alt=""><img class="mflag" src="flags/cr.png" alt=""><img class="mflag" src="flags/pa.png" alt=""><img class="mflag" src="flags/do.png" alt=""><img class="mflag" src="flags/gt.png" alt=""><img class="mflag" src="flags/bz.png" alt=""><img class="mflag" src="flags/sv.png" alt=""><img class="mflag" src="flags/hn.png" alt=""><img class="mflag" src="flags/ni.png" alt=""><img class="mflag" src="flags/cr.png" alt=""><img class="mflag" src="flags/pa.png" alt=""><img class="mflag" src="flags/do.png" alt=""><img class="mflag" src="flags/gt.png" alt=""><img class="mflag" src="flags/bz.png" alt=""><img class="mflag" src="flags/sv.png" alt=""><img class="mflag" src="flags/hn.png" alt=""><img class="mflag" src="flags/ni.png" alt=""><img class="mflag" src="flags/cr.png" alt=""><img class="mflag" src="flags/pa.png" alt=""><img class="mflag" src="flags/do.png" alt="">
@@ -281,18 +310,18 @@
     <!-- Bloque 2 — Por qué existe -->
     <div class="blk alt">
       <div class="container">
-        <div class="blk-eyebrow">El problema</div>
-        <h2>Por qué existe</h2>
+        <div class="blk-eyebrow" data-i18n="b2.eyebrow">El problema</div>
+        <h2 data-i18n="b2.h2">Por qué existe</h2>
         <div class="blk-rule"></div>
-        <p>La región enfrenta simultáneamente variabilidad climática (El Niño / La Niña), dependencia de importaciones en rubros sensibles (arroz, maíz blanco, frijol, entre otros) y decisiones de política que no pueden esperar a que las cifras de cosecha estén cerradas. Vigía nace para cerrar esa brecha: llevar a los escritorios de decisión información temprana, trazable y con la misma base metodológica en los ocho países, de modo que las decisiones —de un ministerio o de la región en conjunto a través del CAC— se tomen sobre evidencia compartida y no sobre percepciones aisladas.</p>
+        <p data-i18n="b2.p">La región enfrenta simultáneamente variabilidad climática (El Niño / La Niña), dependencia de importaciones en rubros sensibles (arroz, maíz blanco, frijol, entre otros) y decisiones de política que no pueden esperar a que las cifras de cosecha estén cerradas. Vigía nace para cerrar esa brecha: llevar a los escritorios de decisión información temprana, trazable y con la misma base metodológica en los ocho países, de modo que las decisiones —de un ministerio o de la región en conjunto a través del CAC— se tomen sobre evidencia compartida y no sobre percepciones aisladas.</p>
         <div class="flow" aria-label="Del dato a la acción">
-          <div class="flow-step"><div class="n">01</div><div class="t">Dato observado</div></div>
+          <div class="flow-step"><div class="n">01</div><div class="t" data-i18n="flow.1">Dato observado</div></div>
           <div class="flow-arrow" aria-hidden="true">→</div>
-          <div class="flow-step"><div class="n">02</div><div class="t">Alerta temprana</div></div>
+          <div class="flow-step"><div class="n">02</div><div class="t" data-i18n="flow.2">Alerta temprana</div></div>
           <div class="flow-arrow" aria-hidden="true">→</div>
-          <div class="flow-step"><div class="n">03</div><div class="t">Ventana de decisión</div></div>
+          <div class="flow-step"><div class="n">03</div><div class="t" data-i18n="flow.3">Ventana de decisión</div></div>
           <div class="flow-arrow" aria-hidden="true">→</div>
-          <div class="flow-step"><div class="n">04</div><div class="t">Acción</div></div>
+          <div class="flow-step"><div class="n">04</div><div class="t" data-i18n="flow.4">Acción</div></div>
         </div>
       </div>
     </div>
@@ -300,39 +329,39 @@
     <!-- Bloque 3 — Cómo trabaja -->
     <div class="blk">
       <div class="container">
-        <div class="blk-eyebrow">El método</div>
-        <h2>Cómo trabaja</h2>
+        <div class="blk-eyebrow" data-i18n="b3.eyebrow">El método</div>
+        <h2 data-i18n="b3.h2">Cómo trabaja</h2>
         <div class="blk-rule"></div>
-        <p>Un principio no negociable rige todo lo que Vigía muestra: <strong>temperatura cero</strong>. Ningún dato se inventa, se estima a la ligera ni se rellena para que “se vea completo”. Cuando la información no existe o no está verificada, Vigía lo declara explícitamente en lugar de aparentar certeza que no tiene. Esa disciplina es lo que permite que ministerios, secretarías técnicas y actores de las cadenas confíen en lo que ven.</p>
+        <p data-i18n-html="b3.p1">Un principio no negociable rige todo lo que Vigía muestra: <strong>temperatura cero</strong>. Ningún dato se inventa, se estima a la ligera ni se rellena para que “se vea completo”. Cuando la información no existe o no está verificada, Vigía lo declara explícitamente en lugar de aparentar certeza que no tiene. Esa disciplina es lo que permite que ministerios, secretarías técnicas y actores de las cadenas confíen en lo que ven.</p>
         <div class="cols3">
           <div class="wcard">
             <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></span>
-            <h3>Datos oficiales</h3>
-            <p>De cada país y de fuentes regionales e internacionales reconocidas.</p>
+            <h3 data-i18n="b3.c1.h">Datos oficiales</h3>
+            <p data-i18n="b3.c1.p">De cada país y de fuentes regionales e internacionales reconocidas.</p>
           </div>
           <div class="wcard">
             <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></span>
-            <h3>Inteligencia artificial</h3>
-            <p>Para procesar, cruzar y dar seguimiento a la información de forma continua.</p>
+            <h3 data-i18n="b3.c2.h">Inteligencia artificial</h3>
+            <p data-i18n="b3.c2.p">Para procesar, cruzar y dar seguimiento a la información de forma continua.</p>
           </div>
           <div class="wcard">
             <span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 16l3.5-4 3 2.2L20 8"/></svg></span>
-            <h3>Metodologías estadísticas robustas</h3>
-            <p>Comunes a los ocho países, para comparar peras con peras entre naciones con distintos sistemas de registro.</p>
+            <h3 data-i18n="b3.c3.h">Metodologías estadísticas robustas</h3>
+            <p data-i18n="b3.c3.p">Comunes a los ocho países, para comparar peras con peras entre naciones con distintos sistemas de registro.</p>
           </div>
         </div>
-        <p style="margin-top:28px">Esta forma de trabajar no parte de cero. Se apoya en la capacidad técnica que el IICA ha construido a lo largo de décadas de presencia permanente en los ocho países de la región, y en una red de aliados regionales e internacionales que aporta lo que ninguna institución logra sola: organismos técnicos regionales con conocimiento de la institucionalidad agropecuaria centroamericana, servicios meteorológicos e hidrológicos nacionales y regionales para la lectura climática, y organismos internacionales de referencia que respaldan y contrastan la información. Vigía no reemplaza ese entramado técnico: lo organiza, lo hace comparable entre países y lo pone al servicio de la decisión pública en el momento oportuno.</p>
+        <p style="margin-top:28px" data-i18n="b3.p2">Esta forma de trabajar no parte de cero. Se apoya en la capacidad técnica que el IICA ha construido a lo largo de décadas de presencia permanente en los ocho países de la región, y en una red de aliados regionales e internacionales que aporta lo que ninguna institución logra sola: organismos técnicos regionales con conocimiento de la institucionalidad agropecuaria centroamericana, servicios meteorológicos e hidrológicos nacionales y regionales para la lectura climática, y organismos internacionales de referencia que respaldan y contrastan la información. Vigía no reemplaza ese entramado técnico: lo organiza, lo hace comparable entre países y lo pone al servicio de la decisión pública en el momento oportuno.</p>
       </div>
     </div>
 
     <!-- Bloque 4 — Qué encontrará en Vigía -->
     <div class="blk alt">
       <div class="container">
-        <div class="blk-eyebrow">Las herramientas</div>
-        <h2>Qué encontrará en Vigía</h2>
+        <div class="blk-eyebrow" data-i18n="b4.eyebrow">Las herramientas</div>
+        <h2 data-i18n="b4.h2">Qué encontrará en Vigía</h2>
         <div class="blk-rule"></div>
-        <p>Vigía se construye como una familia creciente de herramientas, que se incorporan de forma gradual conforme cada módulo se valida con los países. Hoy ya está operativo el módulo de vigilancia de seguridad alimentaria; progresivamente se suman módulos para el monitoreo climático, el seguimiento de mercados internacionales, y el apoyo a la planificación y gestión de políticas, planes, programas y proyectos de los ministerios.</p>
-        <button class="btn-primary blk-btn" data-tab="herramientas" type="button">Explorar las herramientas de Vigía <span class="mono">→</span></button>
+        <p data-i18n="b4.p">Vigía se construye como una familia creciente de herramientas, que se incorporan de forma gradual conforme cada módulo se valida con los países. Hoy ya está operativo el módulo de vigilancia de seguridad alimentaria; progresivamente se suman módulos para el monitoreo climático, el seguimiento de mercados internacionales, y el apoyo a la planificación y gestión de políticas, planes, programas y proyectos de los ministerios.</p>
+        <button class="btn-primary blk-btn" data-tab="herramientas" type="button"><span data-i18n="b4.btn">Explorar las herramientas de Vigía</span> <span class="mono">→</span></button>
       </div>
     </div>
 
@@ -340,14 +369,14 @@
     <div class="blk">
       <div class="container">
         <div class="alianza">
-          <div class="blk-eyebrow">Una alianza regional</div>
-          <h2>Construido con y para la región</h2>
+          <div class="blk-eyebrow" data-i18n="b5.eyebrow">Una alianza regional</div>
+          <h2 data-i18n="b5.h2">Construido con y para la región</h2>
           <div class="blk-rule"></div>
-          <p>Vigía es un desarrollo conjunto del <strong>IICA</strong> y el <strong>CAC / SE-CAC</strong>, construido con y para las representaciones del IICA y los ministerios / secretarías de agricultura de los ocho países de la región SICA. No reemplaza el criterio técnico ni político de cada país: lo alimenta con información oportuna y comparable, para fortalecer la coordinación regional frente a los desafíos de la seguridad alimentaria.</p>
+          <p data-i18n-html="b5.p">Vigía es un desarrollo conjunto del <strong>IICA</strong> y el <strong>CAC / SE-CAC</strong>, construido con y para las representaciones del IICA y los ministerios / secretarías de agricultura de los ocho países de la región SICA. No reemplaza el criterio técnico ni político de cada país: lo alimenta con información oportuna y comparable, para fortalecer la coordinación regional frente a los desafíos de la seguridad alimentaria.</p>
           <div class="partners">
             <span class="partner">IICA</span>
             <span class="partner">CAC / SE-CAC</span>
-            <span class="partner">Región SICA · 8 países</span>
+            <span class="partner" data-i18n="b5.partner3">Región SICA · 8 países</span>
           </div>
         </div>
       </div>
@@ -357,7 +386,7 @@
     <div class="slogan">
       <div class="container">
         <div class="k">Vigía</div>
-        <p>“Ver a tiempo, para decidir a tiempo.”</p>
+        <p data-i18n="slogan.quote">“Ver a tiempo, para decidir a tiempo.”</p>
       </div>
     </div>
 
@@ -368,24 +397,24 @@
     <div class="container">
       <div class="herr-head">
         <div>
-          <div class="herr-eyebrow">Herramientas del observatorio</div>
-          <h2>Explore la colección</h2>
+          <div class="herr-eyebrow" data-i18n="herr.eyebrow">Herramientas del observatorio</div>
+          <h2 data-i18n="herr.h2">Explore la colección</h2>
         </div>
-        <span class="herr-count">1 herramienta activa</span>
+        <span class="herr-count" data-i18n="herr.count">1 herramienta activa</span>
       </div>
       <div class="tool">
         <div class="tool-top">
           <div>
-            <div class="tool-badge"><span class="dot"></span>Herramienta activa</div>
+            <div class="tool-badge"><span class="dot"></span><span data-i18n="tool.badge">Herramienta activa</span></div>
             <div class="tool-name">Vigía Arroz</div>
           </div>
-          <a class="btn-tool" href="https://arroz.iicapanama.net">Abrir Vigía Arroz <span class="mono">→</span></a>
+          <a class="btn-tool" href="https://arroz.iicapanama.net"><span data-i18n="tool.open">Abrir Vigía Arroz</span> <span class="mono">→</span></a>
         </div>
-        <p class="tool-desc">Vigía Arroz da seguimiento a la disponibilidad de arroz en Panamá. Proyecta, mes a mes, cuánto arroz habrá disponible frente al consumo esperado del país, y señala con un semáforo los meses en riesgo de déficit.</p>
+        <p class="tool-desc" data-i18n="tool.desc">Vigía Arroz da seguimiento a la disponibilidad de arroz en Panamá. Proyecta, mes a mes, cuánto arroz habrá disponible frente al consumo esperado del país, y señala con un semáforo los meses en riesgo de déficit.</p>
         <div class="tool-sub">
-          <div><div class="tool-sub-k">Proyección mensual</div><p class="tool-sub-p">Disponibilidad aparente de arroz (qq LS), calculada para cada mes del período.</p></div>
-          <div><div class="tool-sub-k">Alertas por semáforo</div><p class="tool-sub-p">Cada mes se marca en verde, amarillo o rojo según la cobertura del consumo.</p></div>
-          <div><div class="tool-sub-k">Balance de disponibilidad</div><p class="tool-sub-p">Inventario inicial + producción + importaciones − consumo estimado.</p></div>
+          <div><div class="tool-sub-k" data-i18n="tool.s1.k">Proyección mensual</div><p class="tool-sub-p" data-i18n="tool.s1.p">Disponibilidad aparente de arroz (qq LS), calculada para cada mes del período.</p></div>
+          <div><div class="tool-sub-k" data-i18n="tool.s2.k">Alertas por semáforo</div><p class="tool-sub-p" data-i18n="tool.s2.p">Cada mes se marca en verde, amarillo o rojo según la cobertura del consumo.</p></div>
+          <div><div class="tool-sub-k" data-i18n="tool.s3.k">Balance de disponibilidad</div><p class="tool-sub-p" data-i18n="tool.s3.p">Inventario inicial + producción + importaciones − consumo estimado.</p></div>
         </div>
       </div>
     </div>
@@ -394,13 +423,13 @@
   <!-- ===== METODOLOGÍA ===== -->
   <section class="tab-panel doc" id="tab-metodologia">
     <div class="container">
-      <div class="doc-wm" aria-hidden="true">MÉTODO</div>
+      <div class="doc-wm" aria-hidden="true" data-i18n="doc1.wm">MÉTODO</div>
       <div class="doc-body">
-        <div class="doc-eyebrow">Metodología</div>
-        <h2>Cómo se construye Vigía</h2>
+        <div class="doc-eyebrow" data-i18n="doc1.eyebrow">Metodología</div>
+        <h2 data-i18n="doc1.h2">Cómo se construye Vigía</h2>
         <div class="doc-rule"></div>
-        <p>Cada herramienta estima la disponibilidad aparente a partir de la producción, los inventarios, el comercio y el consumo, y la resume con una alerta por semáforo. Bajo el principio de <strong>temperatura cero</strong>, ningún dato se rellena: cuando la información no está verificada, se declara. La documentación detallada por módulo se publicará en esta sección.</p>
-        <span class="pill-prep">En preparación</span>
+        <p data-i18n-html="doc1.p">Cada herramienta estima la disponibilidad aparente a partir de la producción, los inventarios, el comercio y el consumo, y la resume con una alerta por semáforo. Bajo el principio de <strong>temperatura cero</strong>, ningún dato se rellena: cuando la información no está verificada, se declara. La documentación detallada por módulo se publicará en esta sección.</p>
+        <span class="pill-prep" data-i18n="prep">En preparación</span>
       </div>
     </div>
   </section>
@@ -408,13 +437,13 @@
   <!-- ===== FUENTES ===== -->
   <section class="tab-panel doc" id="tab-fuentes">
     <div class="container">
-      <div class="doc-wm" aria-hidden="true">FUENTES</div>
+      <div class="doc-wm" aria-hidden="true" data-i18n="doc2.wm">FUENTES</div>
       <div class="doc-body">
-        <div class="doc-eyebrow">Fuentes</div>
-        <h2>De dónde vienen los datos</h2>
+        <div class="doc-eyebrow" data-i18n="doc2.eyebrow">Fuentes</div>
+        <h2 data-i18n="doc2.h2">De dónde vienen los datos</h2>
         <div class="doc-rule"></div>
-        <p>Vigía integra datos oficiales de cada país y de fuentes regionales e internacionales reconocidas, junto con servicios meteorológicos e hidrológicos para la lectura climática. El detalle de fuentes y su periodicidad, por herramienta, se publicará en esta sección.</p>
-        <span class="pill-prep">En preparación</span>
+        <p data-i18n="doc2.p">Vigía integra datos oficiales de cada país y de fuentes regionales e internacionales reconocidas, junto con servicios meteorológicos e hidrológicos para la lectura climática. El detalle de fuentes y su periodicidad, por herramienta, se publicará en esta sección.</p>
+        <span class="pill-prep" data-i18n="prep">En preparación</span>
       </div>
     </div>
   </section>
@@ -428,41 +457,41 @@
       <div>
         <div class="footer-brand">Vigía</div>
         <div class="footer-rule"></div>
-        <p class="footer-desc">Sistema de vigilancia inteligente para la agricultura y la seguridad alimentaria de Centroamérica y República Dominicana. Un desarrollo conjunto del IICA y el Consejo Agropecuario Centroamericano (CAC / SE-CAC).</p>
+        <p class="footer-desc" data-i18n="footer.desc">Sistema de vigilancia inteligente para la agricultura y la seguridad alimentaria de Centroamérica y República Dominicana. Un desarrollo conjunto del IICA y el Consejo Agropecuario Centroamericano (CAC / SE-CAC).</p>
       </div>
       <div class="footer-col">
-        <div class="footer-h">Herramientas</div>
+        <div class="footer-h" data-i18n="footer.h.tools">Herramientas</div>
         <div class="footer-h-rule"></div>
         <ul>
           <li><a href="https://arroz.iicapanama.net">Vigía Arroz</a></li>
-          <li><span class="footer-soon">Monitoreo climático</span></li>
-          <li><span class="footer-soon">Mercados internacionales</span></li>
-          <li><span class="footer-soon">Planificación y políticas</span></li>
+          <li><span class="footer-soon" data-i18n="footer.l.clima">Monitoreo climático</span></li>
+          <li><span class="footer-soon" data-i18n="footer.l.mercados">Mercados internacionales</span></li>
+          <li><span class="footer-soon" data-i18n="footer.l.plan">Planificación y políticas</span></li>
         </ul>
       </div>
       <div class="footer-col">
-        <div class="footer-h">Recursos</div>
+        <div class="footer-h" data-i18n="footer.h.recursos">Recursos</div>
         <div class="footer-h-rule"></div>
         <ul>
-          <li><a data-tab="metodologia">Metodología</a></li>
-          <li><a data-tab="fuentes">Fuentes de datos</a></li>
-          <li><span class="footer-na">Glosario de términos</span></li>
+          <li><a data-tab="metodologia" data-i18n="footer.l.metodologia">Metodología</a></li>
+          <li><a data-tab="fuentes" data-i18n="footer.l.fuentes">Fuentes de datos</a></li>
+          <li><span class="footer-na" data-i18n="footer.l.glosario">Glosario de términos</span></li>
         </ul>
       </div>
       <div class="footer-col">
-        <div class="footer-h">Institucional</div>
+        <div class="footer-h" data-i18n="footer.h.institucional">Institucional</div>
         <div class="footer-h-rule"></div>
         <ul>
           <li><span class="footer-na">IICA</span></li>
           <li><span class="footer-na">CAC / SE-CAC</span></li>
-          <li><span class="footer-na">Contacto</span></li>
+          <li><span class="footer-na" data-i18n="footer.l.contacto">Contacto</span></li>
         </ul>
       </div>
     </div>
-    <div class="footer-copy">© 2026 IICA · Instituto Interamericano de Cooperación para la Agricultura · en alianza con el CAC / SE-CAC</div>
+    <div class="footer-copy" data-i18n="footer.copy">© 2026 IICA · Instituto Interamericano de Cooperación para la Agricultura · en alianza con el CAC / SE-CAC</div>
   </div>
   <div class="footer-bottom">
-    <div class="container">Vigía · Región SICA — Centroamérica y República Dominicana</div>
+    <div class="container" data-i18n="footer.bottom">Vigía · Región SICA — Centroamérica y República Dominicana</div>
   </div>
 </footer>
 
@@ -477,10 +506,155 @@
       });
       window.scrollTo(0, 0);
     }
+    // ---- i18n: English dictionary; Spanish is captured from the page itself (data-i18n / data-i18n-html) ----
+    var I18N_EN = {
+      'nav.inicio':'Home','nav.herramientas':'Tools','nav.metodologia':'Methodology','nav.fuentes':'Sources',
+      'hero.kicker':'Regional observatory',
+      'hero.h1':'The intelligent monitoring system for agriculture in Central America and the Dominican Republic',
+      'hero.lead':'Permanent, verified-data monitoring of the region’s agricultural production and food security — to see in time and decide in time.',
+      'hero.cta':'Explore the tools','hero.secondary':'About the methodology',
+      'flags.cap':'8 countries of the SICA region',
+      'b1.eyebrow':'The observatory','b1.h2':'What is Vigía?',
+      'b1.p1':'A <strong>vigía</strong> is someone who watches from a high point to anticipate what is approaching —a storm, an opportunity, a risk— and to give warning in time so that others can act. That is, literally, the purpose of this platform: to provide the Ministries and Secretariats of Agriculture of the SICA region with permanent monitoring, based on verified data, of the state and evolution of crop and livestock production and of food security.',
+      'b1.p2':'<strong>Vigía</strong> is the digital platform that <strong>IICA</strong>, in alliance with the <strong>Central American Agricultural Council (CAC)</strong> through its Executive Secretariat (<strong>SE-CAC</strong>), is gradually making available to the countries of the region.',
+      'b1.p3':'It is not a static report or a decorative dashboard. Vigía integrates official data from each country —production, trade, climate, markets— with artificial intelligence and robust statistical methods to produce a clear and verifiable reading of the regional agrifood landscape: what is happening, how severe it is, and what window of time authorities have to act before an alert becomes a crisis.',
+      'b2.eyebrow':'The problem','b2.h2':'Why it exists',
+      'b2.p':'The region simultaneously faces climate variability (El Niño / La Niña), dependence on imports in sensitive commodities (rice, white maize, beans, among others) and policy decisions that cannot wait for harvest figures to be finalized. Vigía was created to close that gap: to bring early, traceable information, with the same methodological basis across the eight countries, to the desks where decisions are made, so that decisions —by a ministry or by the region as a whole through the CAC— are taken on shared evidence and not on isolated perceptions.',
+      'flow.1':'Observed data','flow.2':'Early alert','flow.3':'Decision window','flow.4':'Action',
+      'b3.eyebrow':'The method','b3.h2':'How it works',
+      'b3.p1':'A non-negotiable principle governs everything Vigía shows: <strong>zero-temperature</strong>. No data is invented, loosely estimated or filled in so that it “looks complete.” When information does not exist or is not verified, Vigía states so explicitly rather than feigning a certainty it does not have. That discipline is what allows ministries, technical secretariats and value-chain actors to trust what they see.',
+      'b3.c1.h':'Official data','b3.c1.p':'From each country and from recognized regional and international sources.',
+      'b3.c2.h':'Artificial intelligence','b3.c2.p':'To process, cross-reference and continuously track information.',
+      'b3.c3.h':'Robust statistical methodologies','b3.c3.p':'Common to the eight countries, to compare like with like across nations with different recording systems.',
+      'b3.p2':'This way of working does not start from scratch. It draws on the technical capacity that IICA has built over decades of permanent presence in the eight countries of the region, and on a network of regional and international allies that contributes what no institution can achieve alone: regional technical bodies with knowledge of Central American agricultural institutions, national and regional meteorological and hydrological services for the climate reading, and leading international organizations that back and cross-check the information. Vigía does not replace that technical fabric: it organizes it, makes it comparable across countries and puts it at the service of public decision-making at the right moment.',
+      'b4.eyebrow':'The tools','b4.h2':'What you will find in Vigía',
+      'b4.p':'Vigía is built as a growing family of tools, incorporated gradually as each module is validated with the countries. The food security monitoring module is already operational today; modules for climate monitoring, tracking of international markets, and support for the planning and management of the ministries’ policies, plans, programs and projects are being added progressively.',
+      'b4.btn':'Explore the Vigía tools',
+      'b5.eyebrow':'A regional alliance','b5.h2':'Built with and for the region',
+      'b5.p':'Vigía is a joint development of <strong>IICA</strong> and the <strong>CAC / SE-CAC</strong>, built with and for the IICA representations and the ministries / secretariats of agriculture of the eight countries of the SICA region. It does not replace the technical or political judgment of each country: it feeds it with timely, comparable information to strengthen regional coordination in the face of food security challenges.',
+      'b5.partner3':'SICA region · 8 countries',
+      'slogan.quote':'“See in time, to decide in time.”',
+      'herr.eyebrow':'Observatory tools','herr.h2':'Explore the collection','herr.count':'1 active tool',
+      'tool.badge':'Active tool','tool.open':'Open Vigía Arroz',
+      'tool.desc':'Vigía Arroz tracks the availability of rice in Panama. Month by month, it projects how much rice will be available against the country’s expected consumption, and flags with a traffic-light indicator the months at risk of shortfall.',
+      'tool.s1.k':'Monthly projection','tool.s1.p':'Apparent availability of rice (qq LS), calculated for each month of the period.',
+      'tool.s2.k':'Traffic-light alerts','tool.s2.p':'Each month is marked green, yellow or red according to consumption coverage.',
+      'tool.s3.k':'Availability balance','tool.s3.p':'Opening inventory + production + imports − estimated consumption.',
+      'doc1.wm':'METHOD','doc1.eyebrow':'Methodology','doc1.h2':'How Vigía is built',
+      'doc1.p':'Each tool estimates apparent availability from production, inventories, trade and consumption, and summarizes it with a traffic-light alert. Under the <strong>zero-temperature</strong> principle, no data is filled in: when information is not verified, it is declared. Detailed documentation by module will be published in this section.',
+      'prep':'In preparation',
+      'doc2.wm':'SOURCES','doc2.eyebrow':'Sources','doc2.h2':'Where the data comes from',
+      'doc2.p':'Vigía integrates official data from each country and from recognized regional and international sources, together with meteorological and hydrological services for the climate reading. The detail of sources and their frequency, by tool, will be published in this section.',
+      'footer.desc':'Intelligent monitoring system for agriculture and food security in Central America and the Dominican Republic. A joint development of IICA and the Central American Agricultural Council (CAC / SE-CAC).',
+      'footer.h.tools':'Tools','footer.l.clima':'Climate monitoring','footer.l.mercados':'International markets','footer.l.plan':'Planning and policies',
+      'footer.h.recursos':'Resources','footer.l.metodologia':'Methodology','footer.l.fuentes':'Data sources','footer.l.glosario':'Glossary of terms',
+      'footer.h.institucional':'Institutional','footer.l.contacto':'Contact',
+      'footer.copy':'© 2026 IICA · Inter-American Institute for Cooperation on Agriculture · in alliance with the CAC / SE-CAC',
+      'footer.bottom':'Vigía · SICA region — Central America and the Dominican Republic',
+      'soon':'soon'
+    };
+    var _orig = {};
+    function cacheOriginals() {
+      document.querySelectorAll('[data-i18n]').forEach(function (el) { _orig['t:' + el.getAttribute('data-i18n')] = el.textContent; });
+      document.querySelectorAll('[data-i18n-html]').forEach(function (el) { _orig['h:' + el.getAttribute('data-i18n-html')] = el.innerHTML; });
+    }
+    function applyLang(lang) {
+      if (lang !== 'en') lang = 'es';
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(function (el) {
+        var k = el.getAttribute('data-i18n');
+        var v = (lang === 'en') ? I18N_EN[k] : _orig['t:' + k];
+        if (v != null) el.textContent = v;
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
+        var k = el.getAttribute('data-i18n-html');
+        var v = (lang === 'en') ? I18N_EN[k] : _orig['h:' + k];
+        if (v != null) el.innerHTML = v;
+      });
+      document.documentElement.style.setProperty('--soon', "'" + (lang === 'en' ? (I18N_EN['soon'] || 'soon') : 'pronto') + "'");
+      var label = document.querySelector('[data-lang-label]');
+      if (label) label.textContent = (lang === 'en' ? 'English' : 'Español');
+      document.querySelectorAll('[data-set-lang]').forEach(function (b) {
+        b.setAttribute('aria-current', b.getAttribute('data-set-lang') === lang ? 'true' : 'false');
+      });
+      // hand the choice off to the tools via ?lang=
+      document.querySelectorAll('a[href*="iicapanama.net"]').forEach(function (a) {
+        try { var u = new URL(a.href); u.searchParams.set('lang', lang); a.href = u.toString(); } catch (e) {}
+      });
+      // persist: apex-domain cookie (shared with *.iicapanama.net tools) + localStorage fallback
+      try { document.cookie = 'vigia-lang=' + lang + ';path=/;max-age=31536000;domain=.iicapanama.net;samesite=lax'; } catch (e) {}
+      try { localStorage.setItem('vigia-lang', lang); } catch (e) {}
+    }
+    function readCookie(name) {
+      var m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+    function initLang() {
+      cacheOriginals();
+      var q = new URLSearchParams(location.search).get('lang');
+      var stored = q || readCookie('vigia-lang');
+      if (!stored) { try { stored = localStorage.getItem('vigia-lang'); } catch (e) {} }
+      if (!stored) stored = ((navigator.language || 'es').slice(0, 2) === 'en') ? 'en' : 'es';
+      applyLang(stored === 'en' ? 'en' : 'es');
+    }
+
     document.addEventListener('click', function (e) {
       var t = e.target.closest('[data-tab]');
-      if (t) { e.preventDefault(); showTab(t.getAttribute('data-tab')); }
+      if (t) { e.preventDefault(); showTab(t.getAttribute('data-tab')); return; }
+      var th = e.target.closest('[data-theme-toggle]');
+      if (th) {
+        var root = document.documentElement;
+        var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('vigia-theme', next); } catch (err) {}
+        return;
+      }
+      var menu = document.querySelector('.lang-menu');
+      var lt = e.target.closest('[data-lang-toggle]');
+      if (lt) {
+        var willOpen = menu.hasAttribute('hidden');
+        if (willOpen) menu.removeAttribute('hidden'); else menu.setAttribute('hidden', '');
+        lt.setAttribute('aria-expanded', String(willOpen));
+        return;
+      }
+      var sl = e.target.closest('[data-set-lang]');
+      if (sl) { applyLang(sl.getAttribute('data-set-lang')); if (menu) menu.setAttribute('hidden', ''); return; }
+      if (menu && !menu.hasAttribute('hidden') && !e.target.closest('.lang-select')) { menu.setAttribute('hidden', ''); }
+      var s = e.target.closest('[data-share]');
+      if (s) {
+        var url = location.href;
+        if (navigator.share) { navigator.share({ title: document.title, url: url }).catch(function () {}); }
+        else if (navigator.clipboard) { navigator.clipboard.writeText(url).catch(function () {}); }
+      }
     });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { var m = document.querySelector('.lang-menu'); if (m) m.setAttribute('hidden', ''); }
+    });
+    initLang();
+  })();
+
+  // hero image carousel — crossfade, auto-advance, dots, pause on hover
+  (function () {
+    var hero = document.querySelector('.hero');
+    if (!hero) return;
+    var slides = hero.querySelectorAll('.slide');
+    var dots = hero.querySelectorAll('.dot');
+    if (!slides.length) return;
+    var i = 0, timer = null;
+    var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function go(n) {
+      i = (n + slides.length) % slides.length;
+      for (var k = 0; k < slides.length; k++) slides[k].classList.toggle('is-active', k === i);
+      for (var d = 0; d < dots.length; d++) dots[d].classList.toggle('is-active', d === i);
+    }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    function start() { if (reduce) return; stop(); timer = setInterval(function () { go(i + 1); }, 5000); }
+    for (var d = 0; d < dots.length; d++) {
+      (function (idx) { dots[idx].addEventListener('click', function () { go(idx); start(); }); })(d);
+    }
+    hero.addEventListener('mouseenter', stop);
+    hero.addEventListener('mouseleave', start);
+    go(0); start();
   })();
 </script>
 </body>
