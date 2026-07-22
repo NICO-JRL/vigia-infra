@@ -175,6 +175,7 @@
   .tool-demo .tool-desc{font-size:15px}
   .btn-demo{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--brand);background:transparent;border:1px solid var(--brandTint);padding:12px 21px;border-radius:6px;white-space:nowrap;cursor:pointer}
   .btn-demo:hover{background:var(--brandBg);border-color:var(--brand)}
+  .tool-demo + .tool-demo{margin-top:16px}
 
   /* metodología / fuentes */
   .doc{background:var(--surface);position:relative;overflow:hidden}
@@ -446,6 +447,16 @@
         </div>
         <p class="tool-desc" data-i18n="demo.desc">Tablero regional de seguimiento del fenómeno El Niño para Centroamérica y República Dominicana: reúne la lectura climática y su posible efecto sobre los ciclos agrícolas de la región. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.</p>
       </div>
+      <div class="tool tool-demo">
+        <div class="tool-top">
+          <div>
+            <div class="demo-badge" data-i18n="demo.badge">Demostración · Vista previa</div>
+            <div class="tool-name" data-i18n="demo2.name">Panel Regional Agroalimentario ENOS 2026–2027</div>
+          </div>
+          <a class="btn-demo" href="https://enos.iicapanama.net"><span data-i18n="demo.open">Ver la demostración</span> <span class="mono" aria-hidden="true">→</span></a>
+        </div>
+        <p class="tool-desc" data-i18n="demo2.desc">Panel regional que integra la señal climática del ENOS con el seguimiento agroalimentario de Centroamérica y República Dominicana, desarrollado por el IICA y la SE-CAC. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.</p>
+      </div>
     </div>
   </section>
 
@@ -573,6 +584,8 @@
       'demo.note':'Prototypes under development, open for review. They are not official tools of the observatory: data and design may still change.',
       'demo.badge':'Demo · Preview','demo.name':'El Niño Dashboard 2026–2027','demo.open':'View the demo',
       'demo.desc':'Regional dashboard tracking the El Niño phenomenon across Central America and the Dominican Republic: it brings together the climate reading and its possible effect on the region’s agricultural cycles. It is a prototype under construction, published for review — it does not replace official information.',
+      'demo2.name':'ENSO Regional Agrifood Dashboard 2026–2027',
+      'demo2.desc':'Regional dashboard that combines the ENSO climate signal with agrifood monitoring across Central America and the Dominican Republic, developed by IICA and the SE-CAC. It is a prototype under construction, published for review — it does not replace official information.',
       'doc1.wm':'METHOD','doc1.eyebrow':'Methodology','doc1.h2':'How Vigía is built',
       'doc1.p':'Each tool estimates apparent availability from production, inventories, trade and consumption, and summarizes it with a traffic-light alert. Under the <strong>zero-temperature</strong> principle, no data is filled in: when information is not verified, it is declared. Detailed documentation by module will be published in this section.',
       'prep':'In preparation',
