@@ -162,6 +162,19 @@
   .tool-sub{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
   .tool-sub-k{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
   .tool-sub-p{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink2);margin:0}
+  /* ---- demos / vistas previas -------------------------------------------
+     Deliberately NOT styled like a launched tool: muted surface, dashed
+     border, no shadow, outlined CTA — so a prototype can never be mistaken
+     for an official product like Vigía Arroz. */
+  .demo-head{margin:40px 0 16px;padding-top:30px;border-top:1px dashed var(--line)}
+  .demo-eyebrow{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin:0 0 8px}
+  .demo-note{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink3);margin:0;max-width:640px}
+  .tool-demo{background:var(--surface2);border:1px dashed var(--line);box-shadow:none}
+  .demo-badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3);background:var(--surface);border:1px solid var(--line);padding:5px 11px;border-radius:999px;margin-bottom:11px}
+  .tool-demo .tool-name{font-size:22px;color:var(--ink2)}
+  .tool-demo .tool-desc{font-size:15px}
+  .btn-demo{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--brand);background:transparent;border:1px solid var(--brandTint);padding:12px 21px;border-radius:6px;white-space:nowrap;cursor:pointer}
+  .btn-demo:hover{background:var(--brandBg);border-color:var(--brand)}
 
   /* metodología / fuentes */
   .doc{background:var(--surface);position:relative;overflow:hidden}
@@ -417,6 +430,22 @@
           <div><div class="tool-sub-k" data-i18n="tool.s3.k">Balance de disponibilidad</div><p class="tool-sub-p" data-i18n="tool.s3.p">Inventario inicial + producción + importaciones − consumo estimado.</p></div>
         </div>
       </div>
+
+      <!-- ----- vistas previas: prototipos, NO herramientas lanzadas ----- -->
+      <div class="demo-head">
+        <h3 class="demo-eyebrow" data-i18n="demo.eyebrow">Vistas previas</h3>
+        <p class="demo-note" data-i18n="demo.note">Prototipos en desarrollo, abiertos para revisión. No son herramientas oficiales del observatorio: los datos y el diseño todavía pueden cambiar.</p>
+      </div>
+      <div class="tool tool-demo">
+        <div class="tool-top">
+          <div>
+            <div class="demo-badge" data-i18n="demo.badge">Demostración · Vista previa</div>
+            <div class="tool-name" data-i18n="demo.name">Tablero El Niño 2026–2027</div>
+          </div>
+          <a class="btn-demo" href="https://elnino.iicapanama.net"><span data-i18n="demo.open">Ver la demostración</span> <span class="mono" aria-hidden="true">→</span></a>
+        </div>
+        <p class="tool-desc" data-i18n="demo.desc">Tablero regional de seguimiento del fenómeno El Niño para Centroamérica y República Dominicana: reúne la lectura climática y su posible efecto sobre los ciclos agrícolas de la región. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.</p>
+      </div>
     </div>
   </section>
 
@@ -540,6 +569,10 @@
       'tool.s1.k':'Monthly projection','tool.s1.p':'Apparent availability of rice (qq LS), calculated for each month of the period.',
       'tool.s2.k':'Traffic-light alerts','tool.s2.p':'Each month is marked green, yellow or red according to consumption coverage.',
       'tool.s3.k':'Availability balance','tool.s3.p':'Opening inventory + production + imports − estimated consumption.',
+      'demo.eyebrow':'Previews',
+      'demo.note':'Prototypes under development, open for review. They are not official tools of the observatory: data and design may still change.',
+      'demo.badge':'Demo · Preview','demo.name':'El Niño Dashboard 2026–2027','demo.open':'View the demo',
+      'demo.desc':'Regional dashboard tracking the El Niño phenomenon across Central America and the Dominican Republic: it brings together the climate reading and its possible effect on the region’s agricultural cycles. It is a prototype under construction, published for review — it does not replace official information.',
       'doc1.wm':'METHOD','doc1.eyebrow':'Methodology','doc1.h2':'How Vigía is built',
       'doc1.p':'Each tool estimates apparent availability from production, inventories, trade and consumption, and summarizes it with a traffic-light alert. Under the <strong>zero-temperature</strong> principle, no data is filled in: when information is not verified, it is declared. Detailed documentation by module will be published in this section.',
       'prep':'In preparation',
