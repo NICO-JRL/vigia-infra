@@ -551,21 +551,36 @@
     // Each section is linkable (#herramientas) and back/forward move between
     // sections. Inicio is the default, so it stays hash-free; the query string
     // (?lang=) is always preserved, so /?lang=en#herramientas works.
-    var TABS = ['inicio', 'herramientas', 'metodologia', 'fuentes'];
+    // Read the tab list off the nav itself, so adding a section to the markup
+    // cannot silently break deep-linking.
+    var TABS = (function () {
+      var list = [];
+      document.querySelectorAll('.nav-link[data-tab]').forEach(function (n) {
+        var v = n.getAttribute('data-tab');
+        if (v && list.indexOf(v) < 0) list.push(v);
+      });
+      return list.length ? list : ['inicio', 'herramientas', 'metodologia', 'fuentes'];
+    })();
     var DEFAULT_TAB = 'inicio';
     function tabFromHash() {
       var h = (location.hash || '').replace(/^#/, '');
       try { h = decodeURIComponent(h); } catch (e) {}
+      h = h.toLowerCase();
       return TABS.indexOf(h) > -1 ? h : DEFAULT_TAB; // unknown hash -> Inicio
     }
-    function pushTabUrl(name) {
+    function urlFor(name) {
       var base = location.pathname + location.search;
-      var next = (name === DEFAULT_TAB) ? base : base + '#' + name;
-      if (next === base + location.hash) return; // already there: no dup entry
-      // pushState keeps Inicio free of a dangling '#'; if it is unavailable
-      // (e.g. opened over file://) fall back to plain hash assignment.
-      try { history.pushState(null, '', next); }
-      catch (e) { location.hash = (name === DEFAULT_TAB) ? '' : name; }
+      return (name === DEFAULT_TAB) ? base : base + '#' + name;
+    }
+    function pushTabUrl(name) {
+      var next = urlFor(name);
+      if (next === location.pathname + location.search + location.hash) return; // already there
+      // When the URL changes but the SAME section stays on screen (e.g. tidying
+      // '#inicio' away), replace instead of push, so Back never lands on an
+      // entry that renders nothing new.
+      var sameView = (name === tabFromHash());
+      try { history[sameView ? 'replaceState' : 'pushState'](null, '', next); }
+      catch (e) { location.hash = (name === DEFAULT_TAB) ? '' : name; } // no History API
     }
     // ---- i18n: English dictionary; Spanish is captured from the page itself (data-i18n / data-i18n-html) ----
     var I18N_EN = {
@@ -704,7 +719,16 @@
     initLang();
     // Open a deep-linked section. With no hash nothing is touched, so a plain
     // load behaves exactly as before (Inicio is already active in the markup).
-    if (location.hash) showTab(tabFromHash());
+    if (location.hash) {
+      var startTab = tabFromHash();
+      showTab(startTab);
+      // A hash that is not a real section (or differs only in case) would leave
+      // the URL disagreeing with the page — and Share would spread it. Tidy it
+      // away in place, without adding a history entry.
+      if (location.hash !== '#' + startTab) {
+        try { history.replaceState(null, '', urlFor(startTab)); } catch (e) {}
+      }
+    }
   })();
 
   // hero image carousel — crossfade, auto-advance, dots, pause on hover
