@@ -546,6 +546,27 @@
       });
       window.scrollTo(0, 0);
     }
+
+    // ---- hash routing ------------------------------------------------------
+    // Each section is linkable (#herramientas) and back/forward move between
+    // sections. Inicio is the default, so it stays hash-free; the query string
+    // (?lang=) is always preserved, so /?lang=en#herramientas works.
+    var TABS = ['inicio', 'herramientas', 'metodologia', 'fuentes'];
+    var DEFAULT_TAB = 'inicio';
+    function tabFromHash() {
+      var h = (location.hash || '').replace(/^#/, '');
+      try { h = decodeURIComponent(h); } catch (e) {}
+      return TABS.indexOf(h) > -1 ? h : DEFAULT_TAB; // unknown hash -> Inicio
+    }
+    function pushTabUrl(name) {
+      var base = location.pathname + location.search;
+      var next = (name === DEFAULT_TAB) ? base : base + '#' + name;
+      if (next === base + location.hash) return; // already there: no dup entry
+      // pushState keeps Inicio free of a dangling '#'; if it is unavailable
+      // (e.g. opened over file://) fall back to plain hash assignment.
+      try { history.pushState(null, '', next); }
+      catch (e) { location.hash = (name === DEFAULT_TAB) ? '' : name; }
+    }
     // ---- i18n: English dictionary; Spanish is captured from the page itself (data-i18n / data-i18n-html) ----
     var I18N_EN = {
       'nav.inicio':'Home','nav.herramientas':'Tools','nav.metodologia':'Methodology','nav.fuentes':'Sources',
@@ -646,7 +667,7 @@
 
     document.addEventListener('click', function (e) {
       var t = e.target.closest('[data-tab]');
-      if (t) { e.preventDefault(); showTab(t.getAttribute('data-tab')); return; }
+      if (t) { e.preventDefault(); var tab = t.getAttribute('data-tab'); showTab(tab); pushTabUrl(tab); return; }
       var th = e.target.closest('[data-theme-toggle]');
       if (th) {
         var root = document.documentElement;
@@ -676,7 +697,14 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') { var m = document.querySelector('.lang-menu'); if (m) m.setAttribute('hidden', ''); }
     });
+    // Back/forward buttons, plus hashes typed or pasted into the address bar.
+    // Both handlers just re-read the URL, so firing both is harmless.
+    window.addEventListener('popstate', function () { showTab(tabFromHash()); });
+    window.addEventListener('hashchange', function () { showTab(tabFromHash()); });
     initLang();
+    // Open a deep-linked section. With no hash nothing is touched, so a plain
+    // load behaves exactly as before (Inicio is already active in the markup).
+    if (location.hash) showTab(tabFromHash());
   })();
 
   // hero image carousel — crossfade, auto-advance, dots, pause on hover
