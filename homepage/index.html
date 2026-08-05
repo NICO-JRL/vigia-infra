@@ -545,6 +545,20 @@
         n.classList.toggle('active', n.getAttribute('data-tab') === name);
       });
       window.scrollTo(0, 0);
+      updateTitle();
+    }
+
+    // ---- document title ----------------------------------------------------
+    // Mirrors the active section, e.g. "Herramientas - Vigía". The section name
+    // is read from the nav button itself, which the i18n layer has already
+    // translated — so there are no separate title strings to keep in sync, and
+    // switching language relabels the tab for free.
+    var BASE_TITLE = document.title;
+    var SITE_TITLE = 'Vigía';
+    function updateTitle() {
+      var a = document.querySelector('.nav-link.active');
+      var label = a ? (a.textContent || '').trim() : '';
+      document.title = label ? label + ' - ' + SITE_TITLE : BASE_TITLE;
     }
 
     // ---- hash routing ------------------------------------------------------
@@ -666,6 +680,7 @@
       // persist: apex-domain cookie (shared with *.iicapanama.net tools) + localStorage fallback
       try { document.cookie = 'vigia-lang=' + lang + ';path=/;max-age=31536000;domain=.iicapanama.net;samesite=lax'; } catch (e) {}
       try { localStorage.setItem('vigia-lang', lang); } catch (e) {}
+      updateTitle(); // nav labels just changed language — relabel the browser tab
     }
     function readCookie(name) {
       var m = document.cookie.match('(?:^|; )' + name + '=([^;]*)');
