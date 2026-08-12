@@ -166,13 +166,42 @@
   .tool-sub{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
   .tool-sub-k{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
   .tool-sub-p{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink2);margin:0}
+  /* ---- agrupación del catálogo -------------------------------------------
+     Tres grupos, en este orden: por país, regionales, vistas previas. La
+     jerarquía es grupo > país > herramienta, y se marca con la regla superior
+     y el tamaño del rótulo, no con más color: la página ya usa un solo azul. */
+  .grp{margin-top:44px}
+  .grp:first-of-type{margin-top:30px}
+  .grp-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;
+    padding-top:22px;border-top:1px solid var(--line);margin-bottom:6px}
+  .grp-k{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink)}
+  .grp-meta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3)}
+  .grp-note{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink3);margin:0 0 18px;max-width:640px}
+
+  /* country row: flag + name + how many tools that country has */
+  .pais-head{display:flex;align-items:center;gap:13px;margin:20px 0 14px}
+  .pais-flag{height:26px;width:auto;border-radius:4px;flex:none;display:block;
+    box-shadow:0 0 0 1px rgba(0,0,0,.07),0 1px 3px rgba(21,33,44,.14)}
+  .pais-name{font-family:var(--sans);font-size:19px;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+  .pais-rule{flex:1;height:1px;background:var(--line)}
+  .pais-count{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);white-space:nowrap}
+
+  /* empty group: says plainly that nothing is published yet, and why */
+  .grp-empty{display:flex;align-items:flex-start;gap:15px;background:var(--surface2);
+    border:1px dashed var(--line);border-radius:16px;padding:26px 28px}
+  .grp-empty-ico{flex:none;margin-top:1px;color:var(--ink3)}
+  .grp-empty-t{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--ink2);margin-bottom:6px}
+  .grp-empty-p{font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--ink3);margin:0;max-width:600px}
+
+  @media (max-width:700px){
+    .pais-head{flex-wrap:wrap}
+    .pais-rule{display:none}
+  }
+
   /* ---- demos / vistas previas -------------------------------------------
      Deliberately NOT styled like a launched tool: muted surface, dashed
      border, no shadow, outlined CTA — so a prototype can never be mistaken
      for an official product like Vigía Arroz. */
-  .demo-head{margin:40px 0 16px;padding-top:30px;border-top:1px dashed var(--line)}
-  .demo-eyebrow{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin:0 0 8px}
-  .demo-note{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink3);margin:0;max-width:640px}
   .tool-demo{background:var(--surface2);border:1px dashed var(--line);box-shadow:none}
   .demo-badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3);background:var(--surface);border:1px solid var(--line);padding:5px 11px;border-radius:999px;margin-bottom:11px}
   .tool-demo .tool-name{font-size:22px;color:var(--ink2)}
@@ -419,26 +448,66 @@
         </div>
         <span class="herr-count" data-i18n="herr.count">1 herramienta activa</span>
       </div>
-      <div class="tool">
-        <div class="tool-top">
-          <div>
-            <div class="tool-badge"><span class="dot"></span><span data-i18n="tool.badge">Herramienta activa</span></div>
-            <div class="tool-name">Vigía Arroz</div>
-          </div>
-          <a class="btn-tool" href="https://arroz.iicapanama.net" target="_blank" rel="noopener"><span data-i18n="tool.open">Abrir Vigía Arroz</span> <span class="mono">→</span></a>
+      <!-- ===== GRUPO 1 · herramientas por país ===== -->
+      <div class="grp">
+        <div class="grp-head">
+          <h3 class="grp-k" data-i18n="grp.pais">Herramientas por país</h3>
+          <span class="grp-meta" data-i18n="grp.paisMeta">1 país con herramientas publicadas</span>
         </div>
-        <p class="tool-desc" data-i18n="tool.desc">Vigía Arroz da seguimiento a la disponibilidad de arroz en Panamá. Proyecta, mes a mes, cuánto arroz habrá disponible frente al consumo esperado del país, y señala con un semáforo los meses en riesgo de déficit.</p>
-        <div class="tool-sub">
-          <div><div class="tool-sub-k" data-i18n="tool.s1.k">Proyección mensual</div><p class="tool-sub-p" data-i18n="tool.s1.p">Disponibilidad aparente de arroz (qq LS), calculada para cada mes del período.</p></div>
-          <div><div class="tool-sub-k" data-i18n="tool.s2.k">Alertas por semáforo</div><p class="tool-sub-p" data-i18n="tool.s2.p">Cada mes se marca en verde, amarillo o rojo según la cobertura del consumo.</p></div>
-          <div><div class="tool-sub-k" data-i18n="tool.s3.k">Balance de disponibilidad</div><p class="tool-sub-p" data-i18n="tool.s3.p">Inventario inicial + producción + importaciones − consumo estimado.</p></div>
+
+        <div class="pais-head">
+          <img class="pais-flag" src="flags/pa.png" alt="" width="39" height="26">
+          <span class="pais-name" data-i18n="pais.pa">Panamá</span>
+          <span class="pais-rule" aria-hidden="true"></span>
+          <span class="pais-count" data-i18n="grp.unaHerr">1 herramienta</span>
+        </div>
+
+        <div class="tool">
+          <div class="tool-top">
+            <div>
+              <div class="tool-badge"><span class="dot"></span><span data-i18n="tool.badge">Herramienta activa</span></div>
+              <div class="tool-name">Vigía Arroz</div>
+            </div>
+            <a class="btn-tool" href="https://arroz.iicapanama.net" target="_blank" rel="noopener"><span data-i18n="tool.open">Abrir Vigía Arroz</span> <span class="mono">→</span></a>
+          </div>
+          <p class="tool-desc" data-i18n="tool.desc">Vigía Arroz da seguimiento a la disponibilidad de arroz en Panamá. Proyecta, mes a mes, cuánto arroz habrá disponible frente al consumo esperado del país, y señala con un semáforo los meses en riesgo de déficit.</p>
+          <div class="tool-sub">
+            <div><div class="tool-sub-k" data-i18n="tool.s1.k">Proyección mensual</div><p class="tool-sub-p" data-i18n="tool.s1.p">Disponibilidad aparente de arroz (qq LS), calculada para cada mes del período.</p></div>
+            <div><div class="tool-sub-k" data-i18n="tool.s2.k">Alertas por semáforo</div><p class="tool-sub-p" data-i18n="tool.s2.p">Cada mes se marca en verde, amarillo o rojo según la cobertura del consumo.</p></div>
+            <div><div class="tool-sub-k" data-i18n="tool.s3.k">Balance de disponibilidad</div><p class="tool-sub-p" data-i18n="tool.s3.p">Inventario inicial + producción + importaciones − consumo estimado.</p></div>
+          </div>
         </div>
       </div>
 
-      <!-- ----- vistas previas: prototipos, NO herramientas lanzadas ----- -->
-      <div class="demo-head">
-        <h3 class="demo-eyebrow" data-i18n="demo.eyebrow">Vistas previas</h3>
-        <p class="demo-note" data-i18n="demo.note">Prototipos en desarrollo, abiertos para revisión. No son herramientas oficiales del observatorio: los datos y el diseño todavía pueden cambiar.</p>
+      <!-- ===== GRUPO 2 · herramientas regionales ===== -->
+      <!-- Sin contenido todavía: se declara en lugar de omitirse, para que la
+           estructura del catálogo sea legible y el vacío sea explícito. -->
+      <div class="grp">
+        <div class="grp-head">
+          <h3 class="grp-k" data-i18n="grp.reg">Herramientas regionales</h3>
+          <span class="grp-meta" data-i18n="grp.regMeta">Cobertura prevista · 8 países SICA</span>
+        </div>
+        <div class="grp-empty">
+          <span class="grp-empty-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"
+                 stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9"></circle><path d="M12 7.5V12l3 1.8"></path>
+            </svg>
+          </span>
+          <div>
+            <div class="grp-empty-t" data-i18n="grp.regEmptyT">Todavía no hay herramientas regionales publicadas</div>
+            <p class="grp-empty-p" data-i18n="grp.regEmptyP">Las herramientas de alcance regional se publicarán aquí conforme se validen con los países. Mientras tanto, los prototipos regionales en desarrollo pueden consultarse más abajo, en Vistas previas.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== GRUPO 3 · vistas previas: prototipos, NO herramientas lanzadas ===== -->
+      <div class="grp">
+        <div class="grp-head">
+          <h3 class="grp-k" data-i18n="demo.eyebrow">Vistas previas</h3>
+          <span class="grp-meta" data-i18n="grp.demoMeta">2 prototipos en revisión</span>
+        </div>
+        <p class="grp-note" data-i18n="demo.note">Prototipos en desarrollo, abiertos para revisión. No son herramientas oficiales del observatorio: los datos y el diseño todavía pueden cambiar.</p>
       </div>
       <div class="tool tool-demo">
         <div class="tool-top">
@@ -627,6 +696,12 @@
       'b5.partner3':'SICA region · 8 countries',
       'slogan.quote':'“See in time, to decide in time.”',
       'herr.eyebrow':'Observatory tools','herr.h2':'Explore the collection','herr.count':'1 active tool',
+      'grp.pais':'Tools by country','grp.paisMeta':'1 country with published tools',
+      'pais.pa':'Panama','grp.unaHerr':'1 tool',
+      'grp.reg':'Regional tools','grp.regMeta':'Planned coverage · 8 SICA countries',
+      'grp.regEmptyT':'No regional tools published yet',
+      'grp.regEmptyP':'Region-wide tools will be published here as they are validated with the countries. In the meantime, the regional prototypes under development can be viewed below, under Previews.',
+      'grp.demoMeta':'2 prototypes under review',
       'tool.badge':'Active tool','tool.open':'Open Vigía Arroz',
       'tool.desc':'Vigía Arroz tracks the availability of rice in Panama. Month by month, it projects how much rice will be available against the country’s expected consumption, and flags with a traffic-light indicator the months at risk of shortfall.',
       'tool.s1.k':'Monthly projection','tool.s1.p':'Apparent availability of rice (qq LS), calculated for each month of the period.',
