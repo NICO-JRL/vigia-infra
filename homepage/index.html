@@ -41,14 +41,22 @@
   .mono{font-family:var(--mono)}
 
   /* header — two-tier: blue brand bar + subtle section-nav ribbon (org style) */
-  .header{background:var(--bar);box-shadow:0 3px 8px -3px rgba(21,33,44,.22)}
-  .header .container{padding:0 40px;min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+  /* Same ribbon as the Vigía Arroz tool (vigia-frontend/src/app.css .masthead):
+     sticky, IICA blue, 64px, a 1px white hairline instead of a drop shadow.
+     z-index sits ABOVE .subnav (50) so the two sticky bars stack rather than
+     fight for top:0 — .subnav is offset to 65px below. */
+  .header{background:var(--bar);position:sticky;top:0;z-index:60;
+    border-bottom:1px solid rgba(255,255,255,.12)}
+  .header .container{padding:0 40px;min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px}
   .brand{display:flex;align-items:center;gap:9px;cursor:pointer;background:none;border:0;padding:8px 0;color:inherit;text-align:left}
-  .brand-logo{height:38px;width:auto;display:block}
+  .brand-logo{height:40px;width:auto;display:block}
   /* utility cluster on the right of the blue brand bar */
   .header-utils{display:flex;align-items:center;gap:3px}
   .util-lang{display:inline-flex;align-items:center;gap:5px;font-family:var(--sans);font-size:13.5px;font-weight:500;color:rgba(255,255,255,.9);background:none;border:0;cursor:pointer;padding:7px 10px;border-radius:6px;transition:background .15s,color .15s}
   .util-lang:hover{background:rgba(255,255,255,.12);color:#fff}
+  .lang-caret{width:11px;height:11px;flex:none;opacity:.65;transition:transform .15s ease,opacity .15s ease}
+  .util-lang:hover .lang-caret{opacity:1}
+  .util-lang[aria-expanded="true"] .lang-caret{transform:rotate(180deg);opacity:1}
   .util-icon{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;color:rgba(255,255,255,.85);background:none;border:0;border-radius:8px;cursor:pointer;transition:background .15s,color .15s}
   .util-icon:hover{background:rgba(255,255,255,.12);color:#fff}
   .util-icon svg{width:18px;height:18px;display:block}
@@ -64,7 +72,7 @@
   .lang-menu button[aria-current="true"]{color:var(--brand);font-weight:600}
   .lang-menu button[aria-current="true"]::after{content:"";flex:none;width:15px;height:15px;background:currentColor;-webkit-mask:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'/></svg>") center/contain no-repeat;mask:url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'/></svg>") center/contain no-repeat}
   /* subtle section-nav ribbon — sits below the blue bar, sticks to the top on scroll */
-  .subnav{position:sticky;top:0;z-index:50;background:var(--brandBg);border-top:1px solid rgba(255,255,255,.5);border-bottom:1px solid var(--line);box-shadow:0 1px 2px rgba(21,33,44,.05)}
+  .subnav{position:sticky;top:65px;z-index:50;background:var(--brandBg);border-top:1px solid rgba(255,255,255,.5);border-bottom:1px solid var(--line);box-shadow:0 1px 2px rgba(21,33,44,.05)}
   .subnav .container{padding:0 40px;min-height:48px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
   .nav-link{position:relative;font-family:var(--sans);font-size:13.5px;cursor:pointer;padding:15px 14px;border:0;background:none;font-weight:500;color:var(--ink2);transition:color .15s}
   .nav-link:hover{color:var(--ink)}
@@ -241,8 +249,9 @@
 
   @media(max-width:840px){
     .container{padding:0 22px}
-    .header .container{padding:0 22px;min-height:52px}
+    .header .container{padding:0 22px;min-height:56px}
     .brand-logo{height:34px}
+    .subnav{top:57px}   /* 56px bar + 1px hairline */
     .subnav .container{padding:0 22px;min-height:42px}
     .nav-link{padding:12px 10px;font-size:13px}
     .hero .container{padding:64px 22px 78px}
@@ -283,7 +292,7 @@
     </button>
     <div class="header-utils">
       <div class="lang-select">
-        <button class="util-lang" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false" aria-label="Idioma"><span data-lang-label>Español</span></button>
+        <button class="util-lang" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false" aria-label="Idioma"><span data-lang-label>Español</span><svg class="lang-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
         <div class="lang-menu" role="menu" hidden>
           <button type="button" role="menuitem" data-set-lang="es">Español</button>
           <button type="button" role="menuitem" data-set-lang="en">English</button>
@@ -772,6 +781,15 @@
       applyLang(stored === 'en' ? 'en' : 'es');
     }
 
+    // Close the language menu AND report it closed. Every close path goes through
+    // here, so aria-expanded can never drift out of step with the menu — it used
+    // to stick on "true" after choosing a language, clicking away, or Escape.
+    function closeLangMenu() {
+      var m = document.querySelector('.lang-menu');
+      var b = document.querySelector('[data-lang-toggle]');
+      if (m) m.setAttribute('hidden', '');
+      if (b) b.setAttribute('aria-expanded', 'false');
+    }
     document.addEventListener('click', function (e) {
       var t = e.target.closest('[data-tab]');
       if (t) { e.preventDefault(); var tab = t.getAttribute('data-tab'); showTab(tab); pushTabUrl(tab); return; }
@@ -792,8 +810,8 @@
         return;
       }
       var sl = e.target.closest('[data-set-lang]');
-      if (sl) { applyLang(sl.getAttribute('data-set-lang')); if (menu) menu.setAttribute('hidden', ''); return; }
-      if (menu && !menu.hasAttribute('hidden') && !e.target.closest('.lang-select')) { menu.setAttribute('hidden', ''); }
+      if (sl) { applyLang(sl.getAttribute('data-set-lang')); closeLangMenu(); return; }
+      if (menu && !menu.hasAttribute('hidden') && !e.target.closest('.lang-select')) { closeLangMenu(); }
       var s = e.target.closest('[data-share]');
       if (s) {
         var url = location.href;
@@ -802,7 +820,7 @@
       }
     });
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') { var m = document.querySelector('.lang-menu'); if (m) m.setAttribute('hidden', ''); }
+      if (e.key === 'Escape') closeLangMenu();
     });
     // Back/forward buttons, plus hashes typed or pasted into the address bar.
     // Both handlers just re-read the URL, so firing both is harmless.
