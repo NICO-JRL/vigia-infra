@@ -5,10 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vigía · Vigilancia inteligente para la agricultura — IICA</title>
 <meta name="description" content="Vigía — plataforma digital del IICA para la vigilancia inteligente de la agricultura y la seguridad alimentaria de Centroamérica y República Dominicana.">
-<!-- favicon: same IICA icon as the Vigía Arroz tool. Relative path — the page
-     is served from a folder root. PNG only, on purpose: favicon.svg in this
-     folder is an outdated logo, so it is deliberately NOT declared. -->
-<link rel="icon" type="image/png" href="favicon.png" />
+<!-- favicon: the same two files, byte for byte, as every Vigía tool (arroz, simulador-enos,
+     perdidas-pa) — the IICA seal at 128 px, plus a multi-resolution .ico because browsers
+     request /favicon.ico on their own regardless of the declared PNG (see
+     simulador-enos/frontend/src/app.html). Relative paths — the page is served from a
+     folder root. -->
+<link rel="icon" href="favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="128x128" href="favicon.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
