@@ -193,7 +193,7 @@
   .pais-head{display:flex;align-items:center;gap:13px;margin:20px 0 14px}
   .pais-flag{height:26px;width:auto;border-radius:4px;flex:none;display:block;
     box-shadow:0 0 0 1px rgba(0,0,0,.07),0 1px 3px rgba(21,33,44,.14)}
-  .pais-name{font-family:var(--sans);font-size:19px;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+  .pais-name{font-family:var(--sans);font-size:19px;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin:0}
   .pais-rule{flex:1;height:1px;background:var(--line)}
   .pais-count{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);white-space:nowrap}
 
@@ -203,6 +203,37 @@
   .grp-empty-ico{flex:none;margin-top:1px;color:var(--ink3)}
   .grp-empty-t{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--ink2);margin-bottom:6px}
   .grp-empty-p{font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--ink3);margin:0;max-width:600px}
+
+  /* ---- índice por país (nivel 1): tiles --------------------------------------
+     Cada tile es un enlace real a #herramientas/<grupo>. Toma la geometría de .wcard
+     (radio 14, 22px), la bandera de la marquesina (32px con su anillo), y los rótulos de
+     la fila de país (.pais-name / .pais-count). Hover y foco usan el único azul de la
+     página; el foco visible se dibuja como contorno, en claro y en oscuro. */
+  .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:20px}
+  .tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 22px 20px;box-shadow:0 1px 2px rgba(21,33,44,.04);color:inherit;transition:border-color .15s,color .15s}
+  .tile:hover{border-color:var(--brand)}
+  .tile:hover .tile-name,.tile:hover .tile-arrow{color:var(--brand)}
+  .tile:focus-visible,.volver:focus-visible,.btn-tool:focus-visible,.btn-demo:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+  .tile-media{display:flex;align-items:center;height:40px;margin-bottom:14px}
+  .tile-flag{height:32px;width:auto;border-radius:4px;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.07),0 1px 3px rgba(21,33,44,.14)}
+  /* la región: las ocho banderas miembro en racimo, 4 × 2 */
+  .tile-cluster{display:grid;grid-template-columns:repeat(4,auto);gap:3px;flex:none}
+  .tile-cluster img{height:14px;width:auto;border-radius:2px;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.07)}
+  .tile-name{font-family:var(--sans);font-size:19px;font-weight:600;letter-spacing:-.01em;color:var(--ink);line-height:1.35;transition:color .15s}
+  .tile-count{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);margin-top:6px}
+  .tile-arrow{position:absolute;top:18px;right:20px;font-family:var(--mono);font-size:18px;color:var(--ink3);transition:color .15s}
+  /* nivel 2: la vuelta al índice, la fila del grupo y sus fichas completas */
+  .herr-vista[hidden]{display:none}
+  .volver{padding:9px 14px;font-size:13.5px;margin-top:30px}
+  .herr-vista .pais-head{margin-top:26px}
+  .fichas .tool + .tool{margin-top:16px}
+  .tool-full{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink2);margin-top:4px}
+  /* vistas previas, compactas: dos por fila, la misma ficha atenuada */
+  .demos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .demos .tool-demo{padding:24px 26px}
+  .demos .tool-demo + .tool-demo{margin-top:0}   /* la regla .tool-demo + .tool-demo de abajo ganaría si no */
+  .demos .tool-demo .tool-desc{font-size:14px;margin-top:14px}
+  @media (max-width:840px){.demos{grid-template-columns:1fr}}
 
   @media (max-width:700px){
     .pais-head{flex-wrap:wrap}
@@ -458,92 +489,12 @@
           <div class="herr-eyebrow" data-i18n="herr.eyebrow">Herramientas del observatorio</div>
           <h2 data-i18n="herr.h2">Explore la colección</h2>
         </div>
-        <span class="herr-count" data-i18n="herr.count">2 herramientas activas</span>
+        <span class="herr-count" data-catalogo-total></span>
       </div>
-      <!-- ===== GRUPO 1 · herramientas por país ===== -->
-      <div class="grp">
-        <div class="grp-head">
-          <h3 class="grp-k" data-i18n="grp.pais">Herramientas por país</h3>
-          <span class="grp-meta" data-i18n="grp.paisMeta">1 país con herramientas publicadas</span>
-        </div>
-
-        <div class="pais-head">
-          <img class="pais-flag" src="flags/pa.png" alt="" width="39" height="26">
-          <span class="pais-name" data-i18n="pais.pa">Panamá</span>
-          <span class="pais-rule" aria-hidden="true"></span>
-          <span class="pais-count" data-i18n="grp.unaHerr">1 herramienta</span>
-        </div>
-
-        <div class="tool">
-          <div class="tool-top">
-            <div>
-              <div class="tool-badge"><span class="dot"></span><span data-i18n="tool.badge">Herramienta activa</span></div>
-              <div class="tool-name">Vigía Arroz</div>
-            </div>
-            <a class="btn-tool" href="https://arroz.iicapanama.net" target="_blank" rel="noopener"><span data-i18n="tool.open">Abrir Vigía Arroz</span> <span class="mono">→</span></a>
-          </div>
-          <p class="tool-desc" data-i18n="tool.desc">Vigía Arroz da seguimiento a la disponibilidad de arroz en Panamá. Proyecta, mes a mes, cuánto arroz habrá disponible frente al consumo esperado del país, y señala con un semáforo los meses en riesgo de déficit.</p>
-          <div class="tool-sub">
-            <div><div class="tool-sub-k" data-i18n="tool.s1.k">Proyección mensual</div><p class="tool-sub-p" data-i18n="tool.s1.p">Disponibilidad aparente de arroz (qq LS), calculada para cada mes del período.</p></div>
-            <div><div class="tool-sub-k" data-i18n="tool.s2.k">Alertas por semáforo</div><p class="tool-sub-p" data-i18n="tool.s2.p">Cada mes se marca en verde, amarillo o rojo según la cobertura del consumo.</p></div>
-            <div><div class="tool-sub-k" data-i18n="tool.s3.k">Balance de disponibilidad</div><p class="tool-sub-p" data-i18n="tool.s3.p">Inventario inicial + producción + importaciones − consumo estimado.</p></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== GRUPO 2 · herramientas regionales ===== -->
-      <!-- El Simulador ENOS se publica aquí (antes estaba el estado vacío). Abre en
-           pestaña nueva, como el resto de las herramientas. -->
-      <div class="grp">
-        <div class="grp-head">
-          <h3 class="grp-k" data-i18n="grp.reg">Herramientas regionales</h3>
-          <span class="grp-meta" data-i18n="grp.regMeta">1 herramienta · 8 países SICA</span>
-        </div>
-        <div class="tool">
-          <div class="tool-top">
-            <div>
-              <div class="tool-badge"><span class="dot"></span><span data-i18n="tool.badge">Herramienta activa</span></div>
-              <div class="tool-name" data-i18n="tool2.name">Simulador ENOS</div>
-            </div>
-            <a class="btn-tool" href="https://simulador-enos.iicapanama.net" target="_blank" rel="noopener"><span data-i18n="tool2.open">Abrir Simulador ENOS</span> <span class="mono">→</span></a>
-          </div>
-          <p class="tool-desc" data-i18n="tool2.desc">El Simulador ENOS proyecta la producción y la autosuficiencia de arroz, maíz y frijol en los ocho países de la región hasta 2030. Entrega rangos de resultados con su probabilidad, no cifras únicas, y permite simular escenarios de El Niño y La Niña para ver cómo se movería el abastecimiento. Sus resultados son preliminares: la validación de la nota metodológica todavía no se ha ejecutado.</p>
-          <div class="tool-sub">
-            <div><div class="tool-sub-k" data-i18n="tool2.s1.k">Proyección bayesiana</div><p class="tool-sub-p" data-i18n="tool2.s1.p">Rango de resultados posibles hasta 2030, con banda de credibilidad del 80 %, en lugar de un número único.</p></div>
-            <div><div class="tool-sub-k" data-i18n="tool2.s2.k">Escenarios ENOS</div><p class="tool-sub-p" data-i18n="tool2.s2.p">El Niño y La Niña simulados año por año, con la línea base siempre visible al lado.</p></div>
-            <div><div class="tool-sub-k" data-i18n="tool2.s3.k">Alerta de importación</div><p class="tool-sub-p" data-i18n="tool2.s3.p">Probabilidad de que la importación necesaria supere el máximo histórico de la serie.</p></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ===== GRUPO 3 · vistas previas: prototipos, NO herramientas lanzadas ===== -->
-      <div class="grp">
-        <div class="grp-head">
-          <h3 class="grp-k" data-i18n="demo.eyebrow">Vistas previas</h3>
-          <span class="grp-meta" data-i18n="grp.demoMeta">2 prototipos en revisión</span>
-        </div>
-        <p class="grp-note" data-i18n="demo.note">Prototipos en desarrollo, abiertos para revisión. No son herramientas oficiales del observatorio: los datos y el diseño todavía pueden cambiar.</p>
-      </div>
-      <div class="tool tool-demo">
-        <div class="tool-top">
-          <div>
-            <div class="demo-badge" data-i18n="demo.badge">Demostración · Vista previa</div>
-            <div class="tool-name" data-i18n="demo.name">Tablero El Niño 2026–2027</div>
-          </div>
-          <a class="btn-demo" href="https://elnino.iicapanama.net" target="_blank" rel="noopener"><span data-i18n="demo.open">Ver la demostración</span> <span class="mono" aria-hidden="true">→</span></a>
-        </div>
-        <p class="tool-desc" data-i18n="demo.desc">Tablero regional de seguimiento del fenómeno El Niño para Centroamérica y República Dominicana: reúne la lectura climática y su posible efecto sobre los ciclos agrícolas de la región. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.</p>
-      </div>
-      <div class="tool tool-demo">
-        <div class="tool-top">
-          <div>
-            <div class="demo-badge" data-i18n="demo.badge">Demostración · Vista previa</div>
-            <div class="tool-name" data-i18n="demo2.name">Panel Regional Agroalimentario ENOS 2026–2027</div>
-          </div>
-          <a class="btn-demo" href="https://enos.iicapanama.net" target="_blank" rel="noopener"><span data-i18n="demo.open">Ver la demostración</span> <span class="mono" aria-hidden="true">→</span></a>
-        </div>
-        <p class="tool-desc" data-i18n="demo2.desc">Panel regional que integra la señal climática del ENOS con el seguimiento agroalimentario de Centroamérica y República Dominicana, desarrollado por el IICA. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.</p>
-      </div>
+      <!-- El índice (tiles por país + regional + vistas previas) y las vistas por grupo
+           (#herramientas/<grupo>, con las fichas completas) los genera renderCatalogo()
+           a partir de CATALOGO, en el script. Aquí no se escribe ninguna herramienta. -->
+      <div data-catalogo-vistas></div>
     </div>
   </section>
 
@@ -589,9 +540,8 @@
       <div class="footer-col">
         <div class="footer-h" data-i18n="footer.h.tools">Herramientas</div>
         <div class="footer-h-rule"></div>
-        <ul>
-          <li><a href="https://arroz.iicapanama.net" target="_blank" rel="noopener">Vigía Arroz</a></li>
-          <li><a href="https://simulador-enos.iicapanama.net" target="_blank" rel="noopener">Simulador ENOS</a></li>
+        <!-- las herramientas activas las inserta renderCatalogo() (CATALOGO); debajo, los módulos por venir -->
+        <ul data-catalogo-footer>
           <li><span class="footer-soon" data-i18n="footer.l.clima">Monitoreo climático</span></li>
           <li><span class="footer-soon" data-i18n="footer.l.mercados">Mercados internacionales</span></li>
           <li><span class="footer-soon" data-i18n="footer.l.plan">Planificación y políticas</span></li>
@@ -624,12 +574,20 @@
 
 <script>
   (function () {
-    function showTab(name) {
+    // `sub` is a view inside Herramientas (#herramientas/panama): one of VISTAS, or ''
+    // for the country index. Any other value falls back to the index.
+    var currentTab = 'inicio', currentSub = '';
+    function showTab(name, sub) {
+      sub = (name === 'herramientas' && sub && VISTAS.indexOf(sub) > -1) ? sub : '';
+      currentTab = name; currentSub = sub;
       document.querySelectorAll('.tab-panel').forEach(function (p) {
         p.classList.toggle('active', p.id === 'tab-' + name);
       });
       document.querySelectorAll('.nav-link').forEach(function (n) {
         n.classList.toggle('active', n.getAttribute('data-tab') === name);
+      });
+      document.querySelectorAll('.herr-vista').forEach(function (v) {
+        v.hidden = (v.getAttribute('data-vista') || '') !== sub;
       });
       window.scrollTo(0, 0);
       updateTitle();
@@ -639,19 +597,27 @@
     // Mirrors the active section, e.g. "Herramientas - Vigía". The section name
     // is read from the nav button itself, which the i18n layer has already
     // translated — so there are no separate title strings to keep in sync, and
-    // switching language relabels the tab for free.
+    // switching language relabels the tab for free. A view inside Herramientas
+    // appends its group's name the same way, read from the view's own heading:
+    // "Herramientas · Panamá - Vigía".
     var BASE_TITLE = document.title;
     var SITE_TITLE = 'Vigía';
     function updateTitle() {
       var a = document.querySelector('.nav-link.active');
       var label = a ? (a.textContent || '').trim() : '';
+      if (label && currentTab === 'herramientas' && currentSub) {
+        var g = document.querySelector('.herr-vista[data-vista="' + currentSub + '"] .pais-name');
+        if (g) label += ' · ' + (g.textContent || '').trim();
+      }
       document.title = label ? label + ' - ' + SITE_TITLE : BASE_TITLE;
     }
 
     // ---- hash routing ------------------------------------------------------
     // Each section is linkable (#herramientas) and back/forward move between
     // sections. Inicio is the default, so it stays hash-free; the query string
-    // (?lang=) is always preserved, so /?lang=en#herramientas works.
+    // (?lang=) is always preserved, so /?lang=en#herramientas works. Inside
+    // Herramientas, a group is a second segment — #herramientas/panama — so a
+    // country's tools can be shared and Back returns to the country index.
     // Read the tab list off the nav itself, so adding a section to the markup
     // cannot silently break deep-linking.
     var TABS = (function () {
@@ -663,25 +629,30 @@
       return list.length ? list : ['inicio', 'herramientas', 'metodologia', 'fuentes'];
     })();
     var DEFAULT_TAB = 'inicio';
-    function tabFromHash() {
+    function routeFromHash() {
       var h = (location.hash || '').replace(/^#/, '');
       try { h = decodeURIComponent(h); } catch (e) {}
-      h = h.toLowerCase();
-      return TABS.indexOf(h) > -1 ? h : DEFAULT_TAB; // unknown hash -> Inicio
+      var parts = h.toLowerCase().split('/');
+      var tab = TABS.indexOf(parts[0]) > -1 ? parts[0] : DEFAULT_TAB; // unknown hash -> Inicio
+      var sub = (tab === 'herramientas' && VISTAS.indexOf(parts[1] || '') > -1) ? parts[1] : ''; // unknown group -> index
+      return { tab: tab, sub: sub };
     }
-    function urlFor(name) {
-      var base = location.pathname + location.search;
-      return (name === DEFAULT_TAB) ? base : base + '#' + name;
+    function hashFor(name, sub) {
+      return (name === DEFAULT_TAB) ? '' : '#' + name + (sub ? '/' + sub : '');
     }
-    function pushTabUrl(name) {
-      var next = urlFor(name);
+    function urlFor(name, sub) {
+      return location.pathname + location.search + hashFor(name, sub);
+    }
+    function pushTabUrl(name, sub) {
+      var next = urlFor(name, sub);
       if (next === location.pathname + location.search + location.hash) return; // already there
-      // When the URL changes but the SAME section stays on screen (e.g. tidying
+      // When the URL changes but the SAME view stays on screen (e.g. tidying
       // '#inicio' away), replace instead of push, so Back never lands on an
       // entry that renders nothing new.
-      var sameView = (name === tabFromHash());
+      var cur = routeFromHash();
+      var sameView = (name === cur.tab && (sub || '') === cur.sub);
       try { history[sameView ? 'replaceState' : 'pushState'](null, '', next); }
-      catch (e) { location.hash = (name === DEFAULT_TAB) ? '' : name; } // no History API
+      catch (e) { location.hash = hashFor(name, sub).replace(/^#/, ''); } // no History API
     }
     // ---- i18n: English dictionary; Spanish is captured from the page itself (data-i18n / data-i18n-html) ----
     var I18N_EN = {
@@ -711,27 +682,7 @@
       'b5.p':'Vigía is a development of <strong>IICA</strong>, built on the basis of the IICA representations and the ministries / secretariats of agriculture of the eight countries of the SICA region. It does not replace the technical or political judgment of each country: it feeds it with timely, comparable information to strengthen regional coordination in the face of food security challenges.',
       'b5.partner3':'SICA region · 8 countries',
       'slogan.quote':'“See in time, to decide in time.”',
-      'herr.eyebrow':'Observatory tools','herr.h2':'Explore the collection','herr.count':'2 active tools',
-      'grp.pais':'Tools by country','grp.paisMeta':'1 country with published tools',
-      'pais.pa':'Panama','grp.unaHerr':'1 tool',
-      'grp.reg':'Regional tools','grp.regMeta':'1 tool · 8 SICA countries',
-      'grp.demoMeta':'2 prototypes under review',
-      'tool.badge':'Active tool','tool.open':'Open Vigía Arroz',
-      'tool.desc':'Vigía Arroz tracks the availability of rice in Panama. Month by month, it projects how much rice will be available against the country’s expected consumption, and flags with a traffic-light indicator the months at risk of shortfall.',
-      'tool.s1.k':'Monthly projection','tool.s1.p':'Apparent availability of rice (qq LS), calculated for each month of the period.',
-      'tool.s2.k':'Traffic-light alerts','tool.s2.p':'Each month is marked green, yellow or red according to consumption coverage.',
-      'tool.s3.k':'Availability balance','tool.s3.p':'Opening inventory + production + imports − estimated consumption.',
-      'tool2.name':'ENSO Simulator','tool2.open':'Open ENSO Simulator',
-      'tool2.desc':'The ENSO Simulator projects production and self-sufficiency for rice, maize and beans across the eight countries of the region through 2030. It returns ranges of outcomes with their probability rather than single figures, and lets you simulate El Niño and La Niña scenarios to see how supply would shift. Its results are preliminary: the validation set out in the methodological note has not yet been carried out.',
-      'tool2.s1.k':'Bayesian projection','tool2.s1.p':'A range of possible outcomes to 2030, with an 80 % credible band, instead of a single figure.',
-      'tool2.s2.k':'ENSO scenarios','tool2.s2.p':'El Niño and La Niña simulated year by year, with the baseline always shown alongside.',
-      'tool2.s3.k':'Import alert','tool2.s3.p':'Probability that the imports required exceed the historical maximum in the series.',
-      'demo.eyebrow':'Previews',
-      'demo.note':'Prototypes under development, open for review. They are not official tools of the observatory: data and design may still change.',
-      'demo.badge':'Demo · Preview','demo.name':'El Niño Dashboard 2026–2027','demo.open':'View the demo',
-      'demo.desc':'Regional dashboard tracking the El Niño phenomenon across Central America and the Dominican Republic: it brings together the climate reading and its possible effect on the region’s agricultural cycles. It is a prototype under construction, published for review — it does not replace official information.',
-      'demo2.name':'ENSO Regional Agrifood Dashboard 2026–2027',
-      'demo2.desc':'Regional dashboard that combines the ENSO climate signal with agrifood monitoring across Central America and the Dominican Republic, developed by IICA. It is a prototype under construction, published for review — it does not replace official information.',
+      'herr.eyebrow':'Observatory tools','herr.h2':'Explore the collection',
       'doc1.wm':'METHOD','doc1.eyebrow':'Methodology','doc1.h2':'How Vigía is built',
       'doc1.p':'Each tool estimates apparent availability from production, inventories, trade and consumption, and summarizes it with a traffic-light alert. Under the <strong>zero-temperature</strong> principle, no data is filled in: when information is not verified, it is declared. Detailed documentation by module will be published in this section.',
       'prep':'In preparation',
@@ -745,6 +696,241 @@
       'footer.bottom':'Vigía · SICA region — Central America and the Dominican Republic',
       'soon':'soon'
     };
+    // ---- catálogo de herramientas — THE single source ---------------------------
+    // Adding a tool or a country means adding ONE entry here. The Herramientas section
+    // (country tiles, the regional tile, every count, the tool cards, the previews) and
+    // the footer's tool list are rendered from it by renderCatalogo() below — nothing
+    // about a tool is written in the markup. Every visible string is { es, en }, or one
+    // string when it reads the same in both languages: renderCatalogo() writes the
+    // Spanish into the DOM and registers the English in I18N_EN, so the page's own
+    // data-i18n mechanism translates the rendered markup like everything else.
+    // The Arroz, ENOS and preview copy below is the page's previous copy, moved here
+    // unchanged. The Vigía SIMPA copy is NEW (September 2026); its English is a draft
+    // PENDING REVIEW, like the tool's own English.
+    var CATALOGO = {
+      paises: [
+        { id: 'panama', bandera: 'flags/pa.png', nombre: { es: 'Panamá', en: 'Panama' },
+          herramientas: [
+            { id: 'arroz', nombre: 'Vigía Arroz', url: 'https://arroz.iicapanama.net',
+              abrir: { es: 'Abrir Vigía Arroz',
+                en: 'Open Vigía Arroz' },
+              desc: { es: 'Vigía Arroz da seguimiento a la disponibilidad de arroz en Panamá. Proyecta, mes a mes, cuánto arroz habrá disponible frente al consumo esperado del país, y señala con un semáforo los meses en riesgo de déficit.',
+                en: 'Vigía Arroz tracks the availability of rice in Panama. Month by month, it projects how much rice will be available against the country’s expected consumption, and flags with a traffic-light indicator the months at risk of shortfall.' },
+              sub: [
+                { k: { es: 'Proyección mensual',
+                    en: 'Monthly projection' },
+                  p: { es: 'Disponibilidad aparente de arroz (qq LS), calculada para cada mes del período.',
+                    en: 'Apparent availability of rice (qq LS), calculated for each month of the period.' } },
+                { k: { es: 'Alertas por semáforo',
+                    en: 'Traffic-light alerts' },
+                  p: { es: 'Cada mes se marca en verde, amarillo o rojo según la cobertura del consumo.',
+                    en: 'Each month is marked green, yellow or red according to consumption coverage.' } },
+                { k: { es: 'Balance de disponibilidad',
+                    en: 'Availability balance' },
+                  p: { es: 'Inventario inicial + producción + importaciones − consumo estimado.',
+                    en: 'Opening inventory + production + imports − estimated consumption.' } },
+              ] },
+            // Vigía SIMPA — NEW; EN draft pending review
+            { id: 'simpa', nombre: 'Vigía SIMPA', url: 'https://simpa.iicapanama.net',
+              nombreLargo: { es: 'Simulador de Pérdidas Potenciales por El Niño en la Agricultura Panameña',
+                en: 'Simulator of Potential El Niño Losses in Panamanian Agriculture' },
+              abrir: { es: 'Abrir Vigía SIMPA',
+                en: 'Open Vigía SIMPA' },
+              desc: { es: 'Vigía SIMPA estima las pérdidas agrícolas de Panamá ante El Niño, por provincia y por rubro, bajo la severidad del evento que el usuario elija. Está calibrado sobre el evento observado en el ciclo 2023 y valora las pérdidas a precios de referencia del MIDA. Es una estimación —no una estadística oficial—, construida a partir de los cierres agrícolas del MIDA, y no sustituye el cierre agrícola oficial.',
+                en: 'Vigía SIMPA estimates Panama’s crop losses under El Niño, by province and by crop, at the event severity the user chooses. It is calibrated on the event observed in the 2023 cycle and values the losses at MIDA reference prices. It is an estimate —not official statistics—, built from MIDA’s agricultural closing reports, and it does not replace the official closing report.' },
+              sub: [
+                { k: { es: 'Mapa por provincia',
+                    en: 'Province map' },
+                  p: { es: 'Semáforo de impacto por provincia: pérdida estimada como porcentaje de la producción esperada, con el detalle de cada provincia y rubro.',
+                    en: 'Traffic-light impact map by province: estimated loss as a share of expected production, with the detail of each province and crop.' } },
+                { k: { es: 'Escenarios de severidad',
+                    en: 'Severity scenarios' },
+                  p: { es: 'Deslizador de 0 % a 38 %, con el evento de 2023 (22 %) como base empírica del modelo, para ver cómo cambia la pérdida.',
+                    en: 'A slider from 0 % to 38 %, with the 2023 event (22 %) as the model’s empirical baseline, to see how the loss changes.' } },
+                { k: { es: 'Valoración económica',
+                    en: 'Economic valuation' },
+                  p: { es: 'Quintales perdidos por caída de rendimiento y por reducción de siembra, valorados en balboas a precios de referencia del MIDA.',
+                    en: 'Quintals lost to yield drop and to reduced planting, valued in balboas at MIDA reference prices.' } },
+              ] }
+          ] }
+      ],
+      region: {
+        id: 'regional', nombre: { es: 'Región SICA', en: 'SICA region' },
+        // the eight member countries, drawn as a cluster of their flags (the marquee's
+        // assets). No institutional emblem: none is licensed for this page.
+        miembros: ['sv', 'gt', 'do', 'pa', 'ni', 'bz', 'hn', 'cr'],
+        herramientas: [
+          { id: 'enos', nombre: { es: 'Simulador ENOS',
+              en: 'ENSO Simulator' }, url: 'https://simulador-enos.iicapanama.net',
+            abrir: { es: 'Abrir Simulador ENOS',
+              en: 'Open ENSO Simulator' },
+            desc: { es: 'El Simulador ENOS proyecta la producción y la autosuficiencia de arroz, maíz y frijol en los ocho países de la región hasta 2030. Entrega rangos de resultados con su probabilidad, no cifras únicas, y permite simular escenarios de El Niño y La Niña para ver cómo se movería el abastecimiento. Sus resultados son preliminares: la validación de la nota metodológica todavía no se ha ejecutado.',
+              en: 'The ENSO Simulator projects production and self-sufficiency for rice, maize and beans across the eight countries of the region through 2030. It returns ranges of outcomes with their probability rather than single figures, and lets you simulate El Niño and La Niña scenarios to see how supply would shift. Its results are preliminary: the validation set out in the methodological note has not yet been carried out.' },
+            sub: [
+              { k: { es: 'Proyección bayesiana',
+                  en: 'Bayesian projection' },
+                p: { es: 'Rango de resultados posibles hasta 2030, con banda de credibilidad del 80 %, en lugar de un número único.',
+                  en: 'A range of possible outcomes to 2030, with an 80 % credible band, instead of a single figure.' } },
+              { k: { es: 'Escenarios ENOS',
+                  en: 'ENSO scenarios' },
+                p: { es: 'El Niño y La Niña simulados año por año, con la línea base siempre visible al lado.',
+                  en: 'El Niño and La Niña simulated year by year, with the baseline always shown alongside.' } },
+              { k: { es: 'Alerta de importación',
+                  en: 'Import alert' },
+                p: { es: 'Probabilidad de que la importación necesaria supere el máximo histórico de la serie.',
+                  en: 'Probability that the imports required exceed the historical maximum in the series.' } },
+            ] }
+        ]
+      },
+      // prototypes under review — listed last, in the muted demo styling
+      demos: [
+        { id: 'elnino', nombre: { es: 'Tablero El Niño 2026–2027',
+            en: 'El Niño Dashboard 2026–2027' }, url: 'https://elnino.iicapanama.net',
+          desc: { es: 'Tablero regional de seguimiento del fenómeno El Niño para Centroamérica y República Dominicana: reúne la lectura climática y su posible efecto sobre los ciclos agrícolas de la región. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.',
+            en: 'Regional dashboard tracking the El Niño phenomenon across Central America and the Dominican Republic: it brings together the climate reading and its possible effect on the region’s agricultural cycles. It is a prototype under construction, published for review — it does not replace official information.' } },
+        { id: 'enos-panel', nombre: { es: 'Panel Regional Agroalimentario ENOS 2026–2027',
+            en: 'ENSO Regional Agrifood Dashboard 2026–2027' }, url: 'https://enos.iicapanama.net',
+          desc: { es: 'Panel regional que integra la señal climática del ENOS con el seguimiento agroalimentario de Centroamérica y República Dominicana, desarrollado por el IICA. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.',
+            en: 'Regional dashboard that combines the ENSO climate signal with agrifood monitoring across Central America and the Dominican Republic, developed by IICA. It is a prototype under construction, published for review — it does not replace official information.' } }
+      ]
+    };
+    // Section labels and plurals, both languages. Counts are never written by hand.
+    var CAT_STR = {
+      porPais: { es: 'Por país',
+          en: 'By country' }, regional: 'Regional',
+      conHerr: { es: 'con herramientas publicadas',
+          en: 'with published tools' },
+      enRevision: { es: 'en revisión',
+          en: 'under review' },
+      previas: { es: 'Vistas previas',
+          en: 'Previews' },
+      previasNota: { es: 'Prototipos en desarrollo, abiertos para revisión. No son herramientas oficiales del observatorio: los datos y el diseño todavía pueden cambiar.',
+          en: 'Prototypes under development, open for review. They are not official tools of the observatory: data and design may still change.' },
+      badge: { es: 'Herramienta activa',
+          en: 'Active tool' }, demoBadge: { es: 'Demostración · Vista previa',
+          en: 'Demo · Preview' }, demoAbrir: { es: 'Ver la demostración',
+          en: 'View the demo' },
+      volver: { es: 'Todos los países',
+          en: 'All countries' },
+      plural: { herramienta: { es: ['herramienta', 'herramientas'], en: ['tool', 'tools'] },
+                pais: { es: ['país', 'países'], en: ['country', 'countries'] },
+                prototipo: { es: ['prototipo', 'prototipos'], en: ['prototype', 'prototypes'] } }
+    };
+    var VISTAS = []; // the level-2 views' ids (#herramientas/<id>), filled by renderCatalogo()
+
+    // Renders the Herramientas section and the footer's tool list from CATALOGO. Runs once,
+    // before initLang(), so cacheOriginals() captures the Spanish and applyLang() finds the
+    // English it registered. Views are all in the DOM from the start; showTab() only toggles
+    // [hidden] on them, so switching view re-renders nothing and translation just works.
+    function renderCatalogo() {
+      var esc = function (v) { return String(v).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+      var T = function (v, lang) { return typeof v === 'string' ? v : v[lang]; };
+      // the data-i18n hook: the Spanish goes into the DOM now, the English into I18N_EN
+      var reg = function (key, v) { I18N_EN[key] = T(v, 'en'); return ' data-i18n="' + key + '"'; };
+      var tx = function (tag, cls, key, v, extra) {
+        return '<' + tag + (cls ? ' class="' + cls + '"' : '') + (extra || '') + reg(key, v) + '>' + esc(T(v, 'es')) + '</' + tag + '>';
+      };
+      var cuenta = function (k, n) {
+        var p = CAT_STR.plural[k];
+        return { es: n + ' ' + p.es[n === 1 ? 0 : 1], en: n + ' ' + p.en[n === 1 ? 0 : 1] };
+      };
+      var join = function (a, b, sep) { return { es: a.es + sep + b.es, en: a.en + sep + b.en }; };
+
+      var paises = CATALOGO.paises, region = CATALOGO.region, demos = CATALOGO.demos;
+      var grupos = paises.concat([region]);
+      var total = grupos.reduce(function (n, g) { return n + g.herramientas.length; }, 0);
+      var nMiembros = region.miembros.length;
+      grupos.forEach(function (g) { VISTAS.push(g.id); });
+
+      var bandera = function (src) { return '<img class="tile-flag" src="' + esc(src) + '" alt="">'; };
+      var cluster = function () {
+        return '<span class="tile-cluster" aria-hidden="true">' + region.miembros.map(function (m) {
+          return '<img src="flags/' + m + '.png" alt="">';
+        }).join('') + '</span>';
+      };
+      var cuentaDe = function (g) {
+        var c = cuenta('herramienta', g.herramientas.length);
+        return g === region ? join(c, cuenta('pais', nMiembros), ' · ') : c;
+      };
+      var tile = function (g, media) {
+        var k = 'cat.grp.' + g.id + '.';
+        return '<a class="tile" href="#herramientas/' + g.id + '" data-tab="herramientas" data-sub="' + g.id + '">' +
+          '<span class="tile-media">' + media + '</span>' +
+          tx('span', 'tile-name', k + 'nombre', g.nombre) +
+          tx('span', 'tile-count', k + 'cuenta', cuentaDe(g)) +
+          '<span class="tile-arrow mono" aria-hidden="true">→</span></a>';
+      };
+      var ficha = function (t) {
+        var k = 'cat.' + t.id + '.';
+        var nombre = typeof t.nombre === 'string' ? '<div class="tool-name">' + esc(t.nombre) + '</div>' : tx('div', 'tool-name', k + 'nombre', t.nombre);
+        var largo = t.nombreLargo ? tx('div', 'tool-full', k + 'largo', t.nombreLargo) : '';
+        return '<div class="tool">' +
+          '<div class="tool-top"><div>' +
+            '<div class="tool-badge"><span class="dot"></span>' + tx('span', '', 'cat.badge', CAT_STR.badge) + '</div>' +
+            nombre + largo +
+          '</div>' +
+          '<a class="btn-tool" href="' + esc(t.url) + '" target="_blank" rel="noopener">' + tx('span', '', k + 'abrir', t.abrir) + ' <span class="mono">→</span></a></div>' +
+          tx('p', 'tool-desc', k + 'desc', t.desc) +
+          '<div class="tool-sub">' + t.sub.map(function (sub, i) {
+            var ks = k + 's' + (i + 1) + '.';
+            return '<div>' + tx('div', 'tool-sub-k', ks + 'k', sub.k) + tx('p', 'tool-sub-p', ks + 'p', sub.p) + '</div>';
+          }).join('') + '</div></div>';
+      };
+      var demo = function (d) {
+        var k = 'cat.demo.' + d.id + '.';
+        return '<div class="tool tool-demo"><div class="tool-top"><div>' +
+          tx('div', 'demo-badge', 'cat.demoBadge', CAT_STR.demoBadge) +
+          tx('div', 'tool-name', k + 'nombre', d.nombre) + '</div>' +
+          '<a class="btn-demo" href="' + esc(d.url) + '" target="_blank" rel="noopener">' + tx('span', '', 'cat.demoAbrir', CAT_STR.demoAbrir) + ' <span class="mono" aria-hidden="true">→</span></a></div>' +
+          tx('p', 'tool-desc', k + 'desc', d.desc) + '</div>';
+      };
+      var grpHead = function (key, titulo, meta) {
+        return '<div class="grp-head">' + tx('h3', 'grp-k', key, titulo) + tx('span', 'grp-meta', key + 'Meta', meta) + '</div>';
+      };
+
+      // level 1 — the index: country tiles, the regional tile, the previews
+      var indice = '<div class="herr-vista" data-vista="">' +
+        '<div class="grp">' + grpHead('cat.porPais', CAT_STR.porPais, join(cuenta('pais', paises.length), CAT_STR.conHerr, ' ')) +
+          '<div class="tiles">' + paises.map(function (p) { return tile(p, bandera(p.bandera)); }).join('') + '</div></div>' +
+        '<div class="grp">' + grpHead('cat.regional', CAT_STR.regional, join(cuenta('herramienta', region.herramientas.length), { es: nMiembros + ' países SICA', en: nMiembros + ' SICA countries' }, ' · ')) +
+          '<div class="tiles">' + tile(region, cluster()) + '</div></div>' +
+        '<div class="grp">' + grpHead('cat.previas', CAT_STR.previas, join(cuenta('prototipo', demos.length), CAT_STR.enRevision, ' ')) +
+          tx('p', 'grp-note', 'cat.previasNota', CAT_STR.previasNota) +
+          '<div class="demos">' + demos.map(demo).join('') + '</div></div>' +
+        '</div>';
+      // level 2 — one view per group: the way back, the group's row, the full cards
+      var vista = function (g, media) {
+        var k = 'cat.grp.' + g.id + '.';
+        return '<div class="herr-vista" data-vista="' + g.id + '" hidden>' +
+          '<a class="btn-demo volver" href="#herramientas" data-tab="herramientas"><span class="mono" aria-hidden="true">←</span> ' + tx('span', '', 'cat.volver', CAT_STR.volver) + '</a>' +
+          '<div class="pais-head">' + media + tx('h3', 'pais-name', k + 'nombre', g.nombre) +
+            '<span class="pais-rule" aria-hidden="true"></span>' + tx('span', 'pais-count', k + 'cuenta', cuentaDe(g)) + '</div>' +
+          '<div class="fichas">' + g.herramientas.map(ficha).join('') + '</div></div>';
+      };
+      var vistas = paises.map(function (p) { return vista(p, '<img class="pais-flag" src="' + esc(p.bandera) + '" alt="" width="39" height="26">'); })
+        .concat([vista(region, cluster())]);
+
+      var host = document.querySelector('[data-catalogo-vistas]');
+      if (host) host.innerHTML = indice + vistas.join('');
+      var count = document.querySelector('[data-catalogo-total]');
+      if (count) {
+        var tot = { es: total + (total === 1 ? ' herramienta activa' : ' herramientas activas'), en: total + (total === 1 ? ' active tool' : ' active tools') };
+        count.setAttribute('data-i18n', 'cat.total'); I18N_EN['cat.total'] = tot.en; count.textContent = tot.es;
+      }
+      // footer — every active tool, countries first, then the regional ones
+      var foot = document.querySelector('[data-catalogo-footer]');
+      if (foot) {
+        var lis = [];
+        grupos.forEach(function (g) {
+          g.herramientas.forEach(function (t) {
+            var nombre = typeof t.nombre === 'string' ? esc(t.nombre) : esc(t.nombre.es);
+            var attr = typeof t.nombre === 'string' ? '' : ' data-i18n="cat.' + t.id + '.nombre"';
+            lis.push('<li><a href="' + esc(t.url) + '" target="_blank" rel="noopener"' + attr + '>' + nombre + '</a></li>');
+          });
+        });
+        foot.insertAdjacentHTML('afterbegin', lis.join(''));
+      }
+    }
     var _orig = {};
     function cacheOriginals() {
       document.querySelectorAll('[data-i18n]').forEach(function (el) { _orig['t:' + el.getAttribute('data-i18n')] = el.textContent; });
@@ -802,7 +988,25 @@
     }
     document.addEventListener('click', function (e) {
       var t = e.target.closest('[data-tab]');
-      if (t) { e.preventDefault(); var tab = t.getAttribute('data-tab'); showTab(tab); pushTabUrl(tab); return; }
+      if (t) {
+        // Real links (the country tiles, "Todos los países"): a modified click — Ctrl/Cmd/
+        // Shift/Alt or a non-primary button — means "open in a new tab/window". The href
+        // already carries the canonical route, so let the browser have it.
+        if (t.tagName === 'A' && t.hasAttribute('href') && (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey)) return;
+        e.preventDefault();
+        var tab = t.getAttribute('data-tab'), sub = t.getAttribute('data-sub') || '';
+        var prevSub = currentSub, fromVista = !!t.closest('.herr-vista');
+        showTab(tab, sub); pushTabUrl(tab, sub);
+        // The tile or the back link lives in the view showTab() just hid, so focus would
+        // fall to <body>. Put it in the view that appeared: the back link at level 2, the
+        // tile we came from on the index. Clicks only — load and Back keep the browser's.
+        if (fromVista && currentTab === 'herramientas') {
+          var vista = document.querySelector('.herr-vista[data-vista="' + currentSub + '"]');
+          var dest = vista && (currentSub ? vista.querySelector('.volver') : vista.querySelector('.tile[data-sub="' + prevSub + '"]'));
+          if (dest) dest.focus();
+        }
+        return;
+      }
       var th = e.target.closest('[data-theme-toggle]');
       if (th) {
         var root = document.documentElement;
@@ -834,19 +1038,21 @@
     });
     // Back/forward buttons, plus hashes typed or pasted into the address bar.
     // Both handlers just re-read the URL, so firing both is harmless.
-    window.addEventListener('popstate', function () { showTab(tabFromHash()); });
-    window.addEventListener('hashchange', function () { showTab(tabFromHash()); });
+    function onRoute() { var r = routeFromHash(); showTab(r.tab, r.sub); }
+    window.addEventListener('popstate', onRoute);
+    window.addEventListener('hashchange', onRoute);
+    renderCatalogo(); // before initLang(): the Spanish it writes is what cacheOriginals() captures
     initLang();
-    // Open a deep-linked section. With no hash nothing is touched, so a plain
-    // load behaves exactly as before (Inicio is already active in the markup).
+    // Open a deep-linked section or group. With no hash nothing is touched, so a
+    // plain load behaves exactly as before (Inicio is already active in the markup).
     if (location.hash) {
-      var startTab = tabFromHash();
-      showTab(startTab);
-      // A hash that is not a real section (or differs only in case) would leave
-      // the URL disagreeing with the page — and Share would spread it. Tidy it
-      // away in place, without adding a history entry.
-      if (location.hash !== '#' + startTab) {
-        try { history.replaceState(null, '', urlFor(startTab)); } catch (e) {}
+      var start = routeFromHash();
+      showTab(start.tab, start.sub);
+      // A hash that is not a real section or group (or differs only in case) would
+      // leave the URL disagreeing with the page — and Share would spread it. Tidy
+      // it away in place, without adding a history entry.
+      if (location.hash !== hashFor(start.tab, start.sub)) {
+        try { history.replaceState(null, '', urlFor(start.tab, start.sub)); } catch (e) {}
       }
     }
   })();
