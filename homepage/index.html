@@ -22,6 +22,9 @@
     --ink:#15212C;--ink2:#56636F;--ink3:#7E8B96;
     --brand:#00457C;--brandBg:#EEF4FA;--brandTint:rgba(0,69,124,.16);
     --surface:#FFFFFF;--surface2:#F6F8FB;--line:#E4E9EE;
+    /* Herramientas (from its prototype): the button hover, the ring around flags, the tile
+       shadows at rest and on hover — redefined for dark below */
+    --barHover:#003862;--flagRing:rgba(0,0,0,.07);--tileShadow:0 1px 2px rgba(21,33,44,.04);--hoverShadow:0 6px 18px -10px rgba(0,69,124,.35);
     /* --brand (ribbon blue) is the only accent blue; --gold aliases it.
        --bar is the constant blue for the ribbon/slogan/buttons (never changes). */
     --gold:#00457C;--goldOn:rgba(255,255,255,.72);--bar:#00457C;--soon:'pronto';
@@ -34,6 +37,7 @@
     --brand:#5AA2E6;--brandBg:#16283A;--brandTint:rgba(255,255,255,.16);
     --surface:#0F1720;--surface2:#16212C;--line:#28343F;
     --gold:#5AA2E6;
+    --flagRing:rgba(255,255,255,.1);--tileShadow:none;--hoverShadow:0 6px 18px -10px rgba(0,0,0,.7);
   }
   :root[data-theme="dark"] .doc-wm{color:#18242F}
   :root[data-theme="dark"] .subnav{border-top-color:rgba(255,255,255,.06)}
@@ -160,97 +164,109 @@
   .slogan .k{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--goldOn);margin-bottom:12px}
   .slogan p{font-family:var(--sans);font-size:26px;font-weight:600;font-style:italic;color:#fff;letter-spacing:-.01em;margin:0;max-width:none}
 
-  /* herramientas */
-  .herr .container{padding:56px 40px 60px}
-  .herr-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:26px}
+  /* ---- herramientas ----------------------------------------------------------------
+     The section is a port of its Claude Design prototype (design-handoff/herramientas-design.html,
+     not in this repo). Every rule below is one of the prototype's inline styles, value for value,
+     moved to a class; the prototype's own tokens (--flagRing, --tileShadow, --hoverShadow,
+     --barHover) are in :root above. Fluid values (clamp) are the prototype's — no breakpoints.
+     Markup comes from renderCatalogo() (script), which mirrors the prototype's element tree. */
+  .herr .container{padding:56px clamp(22px,4vw,40px) 64px}
+  .herr-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;margin-bottom:26px}
   .herr-eyebrow{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px}
-  .herr h2{font-family:var(--sans);font-size:26px;font-weight:600;margin:0;letter-spacing:-.015em}
-  .herr-count{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);padding-bottom:4px}
-  .tool{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:32px 34px;box-shadow:0 1px 2px rgba(21,33,44,.04)}
-  .tool-top{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;flex-wrap:wrap}
-  .tool-badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--brand);margin-bottom:10px}
-  .tool-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--brand)}
-  .tool-name{font-family:var(--sans);font-size:26px;font-weight:600;letter-spacing:-.015em}
-  .btn-tool{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:14px;font-weight:600;color:#fff;background:var(--bar);padding:13px 22px;border-radius:6px;white-space:nowrap;cursor:pointer}
-  .btn-tool:hover{background:#003862}
-  .tool-desc{font-family:var(--sans);font-size:16px;line-height:1.6;color:var(--ink2);max-width:680px;margin:18px 0 0}
-  .tool-sub{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
-  .tool-sub-k{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
-  .tool-sub-p{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink2);margin:0}
-  /* ---- agrupación del catálogo -------------------------------------------
-     Tres grupos, en este orden: por país, regionales, vistas previas. La
-     jerarquía es grupo > país > herramienta, y se marca con la regla superior
-     y el tamaño del rótulo, no con más color: la página ya usa un solo azul. */
+  .herr h2{font-size:26px;font-weight:600;margin:0;letter-spacing:-.015em}
+  .herr-count{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink2);padding-bottom:4px;font-variant-numeric:tabular-nums}
+  .herr a:focus-visible,.herr button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+  @media (prefers-reduced-motion:reduce){.herr *{transition:none!important}}
+  .herr-vista[hidden]{display:none}
+  .mono-arrow{font-family:var(--mono)}
+  /* groups: por país, regional, vistas previas */
   .grp{margin-top:44px}
   .grp:first-of-type{margin-top:30px}
-  .grp-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;
-    padding-top:22px;border-top:1px solid var(--line);margin-bottom:6px}
-  .grp-k{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink)}
-  .grp-meta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3)}
-  .grp-note{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink3);margin:0 0 18px;max-width:640px}
-
-  /* country row: flag + name + how many tools that country has */
-  .pais-head{display:flex;align-items:center;gap:13px;margin:20px 0 14px}
-  .pais-flag{height:26px;width:auto;border-radius:4px;flex:none;display:block;
-    box-shadow:0 0 0 1px rgba(0,0,0,.07),0 1px 3px rgba(21,33,44,.14)}
-  .pais-name{font-family:var(--sans);font-size:19px;font-weight:600;letter-spacing:-.01em;color:var(--ink);margin:0}
-  .pais-rule{flex:1;height:1px;background:var(--line)}
-  .pais-count{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);white-space:nowrap}
-
-  /* empty group: says plainly that nothing is published yet, and why */
-  .grp-empty{display:flex;align-items:flex-start;gap:15px;background:var(--surface2);
-    border:1px dashed var(--line);border-radius:16px;padding:26px 28px}
-  .grp-empty-ico{flex:none;margin-top:1px;color:var(--ink3)}
-  .grp-empty-t{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--ink2);margin-bottom:6px}
-  .grp-empty-p{font-family:var(--sans);font-size:14px;line-height:1.6;color:var(--ink3);margin:0;max-width:600px}
-
-  /* ---- índice por país (nivel 1): tiles --------------------------------------
-     Cada tile es un enlace real a #herramientas/<grupo>. Toma la geometría de .wcard
-     (radio 14, 22px), la bandera de la marquesina (32px con su anillo), y los rótulos de
-     la fila de país (.pais-name / .pais-count). Hover y foco usan el único azul de la
-     página; el foco visible se dibuja como contorno, en claro y en oscuro. */
-  .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-top:20px}
-  .tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px 22px 20px;box-shadow:0 1px 2px rgba(21,33,44,.04);color:inherit;transition:border-color .15s,color .15s}
-  .tile:hover{border-color:var(--brand)}
-  .tile:hover .tile-name,.tile:hover .tile-arrow{color:var(--brand)}
-  .tile:focus-visible,.volver:focus-visible,.btn-tool:focus-visible,.btn-demo:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
-  .tile-media{display:flex;align-items:center;height:40px;margin-bottom:14px}
-  .tile-flag{height:32px;width:auto;border-radius:4px;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.07),0 1px 3px rgba(21,33,44,.14)}
-  /* la región: las ocho banderas miembro en racimo, 4 × 2 */
-  .tile-cluster{display:grid;grid-template-columns:repeat(4,auto);gap:3px;flex:none}
-  .tile-cluster img{height:14px;width:auto;border-radius:2px;display:block;box-shadow:0 0 0 1px rgba(0,0,0,.07)}
-  .tile-name{font-family:var(--sans);font-size:19px;font-weight:600;letter-spacing:-.01em;color:var(--ink);line-height:1.35;transition:color .15s}
-  .tile-count{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink3);margin-top:6px}
-  .tile-arrow{position:absolute;top:18px;right:20px;font-family:var(--mono);font-size:18px;color:var(--ink3);transition:color .15s}
-  /* nivel 2: la vuelta al índice, la fila del grupo y sus fichas completas */
-  .herr-vista[hidden]{display:none}
-  .volver{padding:9px 14px;font-size:13.5px;margin-top:30px}
-  .herr-vista .pais-head{margin-top:26px}
-  .fichas .tool + .tool{margin-top:16px}
-  .tool-full{font-family:var(--sans);font-size:13.5px;line-height:1.55;color:var(--ink2);margin-top:4px}
-  /* vistas previas, compactas: dos por fila, la misma ficha atenuada */
-  .demos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-  .demos .tool-demo{padding:24px 26px}
-  .demos .tool-demo + .tool-demo{margin-top:0}   /* la regla .tool-demo + .tool-demo de abajo ganaría si no */
-  .demos .tool-demo .tool-desc{font-size:14px;margin-top:14px}
-  @media (max-width:840px){.demos{grid-template-columns:1fr}}
-
-  @media (max-width:700px){
-    .pais-head{flex-wrap:wrap}
-    .pais-rule{display:none}
-  }
-
-  /* ---- demos / vistas previas -------------------------------------------
-     Deliberately NOT styled like a launched tool: muted surface, dashed
-     border, no shadow, outlined CTA — so a prototype can never be mistaken
-     for an official product like Vigía Arroz. */
-  .tool-demo{background:var(--surface2);border:1px dashed var(--line);box-shadow:none}
-  .demo-badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--ink3);background:var(--surface);border:1px solid var(--line);padding:5px 11px;border-radius:999px;margin-bottom:11px}
-  .tool-demo .tool-name{font-size:22px;color:var(--ink2)}
-  .tool-demo .tool-desc{font-size:15px}
-  .btn-demo{display:inline-flex;align-items:center;gap:9px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--brand);background:transparent;border:1px solid var(--brandTint);padding:12px 21px;border-radius:6px;white-space:nowrap;cursor:pointer}
-  .btn-demo:hover{background:var(--brandBg);border-color:var(--brand)}
-  .tool-demo + .tool-demo{margin-top:16px}
+  .grp-head{display:flex;justify-content:space-between;align-items:baseline;gap:6px 20px;flex-wrap:wrap;padding-top:22px;border-top:1px solid var(--line)}
+  .grp-head-demos{margin-bottom:6px}
+  .grp-k{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink);margin:0}
+  .grp-meta{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink2);font-variant-numeric:tabular-nums}
+  .grp-note{font-size:13.5px;line-height:1.55;color:var(--ink2);margin:0 0 18px;max-width:640px;text-wrap:pretty}
+  /* tiles: a link when the country has tools, a muted <div> when it has none */
+  .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(clamp(148px,40vw,240px),1fr));gap:clamp(10px,1.4vw,16px);margin-top:20px}
+  .tile{position:relative;display:flex;flex-direction:column;align-items:flex-start;min-height:clamp(136px,14vw,156px);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:clamp(16px,2vw,22px);box-shadow:var(--tileShadow);color:var(--ink);transition:border-color .15s ease,color .15s ease,box-shadow .2s ease}
+  .tile:hover{border-color:var(--brand);color:var(--brand);box-shadow:var(--hoverShadow)}
+  .tile-vacio{display:flex;flex-direction:column;align-items:flex-start;min-height:clamp(136px,14vw,156px);background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:clamp(16px,2vw,22px)}
+  .tile-flag{width:48px;height:32px;object-fit:cover;border-radius:4px;display:block;box-shadow:0 0 0 1px var(--flagRing),0 1px 3px rgba(21,33,44,.14)}
+  .tile-name{margin-top:auto;padding-top:18px;font-size:clamp(17px,1.7vw,19px);font-weight:600;letter-spacing:-.01em;line-height:1.3}
+  .tile-name-pais{text-wrap:balance}
+  .tile-vacio .tile-name{color:var(--ink2)}
+  .tile-count{display:flex;align-items:center;gap:7px;margin-top:5px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink2);font-variant-numeric:tabular-nums}
+  .tile-sin{margin-top:5px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink2)}
+  .punto{flex:none;width:6px;height:6px;border-radius:50%;background:var(--brand)}
+  .tile-arrow{position:absolute;top:18px;right:20px;font-family:var(--mono);font-size:18px;line-height:1;transition:transform .2s ease;transform:translateX(0)}
+  .tile:hover .tile-arrow,.tile:focus .tile-arrow{transform:translateX(3px)}
+  /* the region's mark: its member flags stacked, 7 / 6 / 5 px apart at the three sizes */
+  .pila{position:relative;flex:none;display:block}
+  .pila img{position:absolute;top:0;object-fit:cover;border-radius:3px;box-shadow:0 0 0 1px var(--flagRing),-2px 0 4px rgba(21,33,44,.16)}
+  .pila-48{width:97px;height:32px}.pila-48 img{width:48px;height:32px}
+  .pila-39{width:81px;height:26px}.pila-39 img{width:39px;height:26px}
+  .pila-30{width:65px;height:20px}.pila-30 img{width:30px;height:20px}
+  /* chips: the region's member countries (a link when the country has tools), and the
+     jump list of a view with four or more tools */
+  .chips{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  .chips-vacios{margin-top:18px}
+  .chips-miembros{margin:0 0 22px}
+  .saltos{margin:0 0 20px}
+  .chips-k{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink2);margin-right:6px}
+  .chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 8px;background:var(--surface2);border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--ink2)}
+  .chip img{width:21px;height:14px;object-fit:cover;border-radius:2px;display:block;box-shadow:0 0 0 1px var(--flagRing)}
+  .chip-link{background:var(--surface);border-color:var(--brandTint);font-weight:600;color:var(--brand);transition:background .15s ease,border-color .15s ease}
+  .chip-link:hover{background:var(--brandBg);border-color:var(--brand);color:var(--brand)}
+  .salto{font-family:var(--sans);font-size:13px;font-weight:500;padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:border-color .15s ease,color .15s ease}
+  .salto:hover{border-color:var(--brand);color:var(--brand)}
+  /* vistas previas: prototypes, deliberately muted (dashed, surface2, outlined button) */
+  .demos{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:16px}
+  .tool-demo{display:flex;flex-direction:column;background:var(--surface2);border:1px dashed var(--line);border-radius:16px;padding:24px 26px}
+  .demo-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px 24px;flex-wrap:wrap}
+  .demo-txt{flex:1 1 220px;min-width:0}
+  .demo-badge{display:inline-flex;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--ink2);background:var(--surface);border:1px solid var(--line);padding:5px 11px;border-radius:999px;margin-bottom:11px}
+  .demo-name{font-size:20px;font-weight:600;letter-spacing:-.015em;line-height:1.3;color:var(--ink2);text-wrap:pretty}
+  .btn-demo{flex:none;display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:600;color:var(--brand);border:1px solid var(--brandTint);padding:11px 18px;border-radius:6px;white-space:nowrap;transition:background .15s ease,border-color .15s ease}
+  .btn-demo:hover{background:var(--brandBg);border-color:var(--brand);color:var(--brand)}
+  .demo-desc{font-size:14px;line-height:1.6;color:var(--ink2);margin:14px 0 0;text-wrap:pretty}
+  /* a group's view: the way back, the group's row, its cards or its empty state */
+  .volver{display:inline-flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;color:var(--brand);border:1px solid var(--brandTint);padding:9px 14px;border-radius:6px;margin-top:30px;transition:background .15s ease,border-color .15s ease}
+  .volver:hover{background:var(--brandBg);border-color:var(--brand);color:var(--brand)}
+  .pais-head{display:flex;align-items:center;gap:13px;flex-wrap:wrap;margin:26px 0 16px}
+  .pais-flag{width:39px;height:26px;object-fit:cover;border-radius:4px;display:block;box-shadow:0 0 0 1px var(--flagRing),0 1px 3px rgba(21,33,44,.14)}
+  .pais-name{font-size:19px;font-weight:600;letter-spacing:-.01em;margin:0;outline:none}
+  .pais-rule{flex:1 1 40px;height:1px;background:var(--line)}
+  .pais-count{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink2);white-space:nowrap;font-variant-numeric:tabular-nums}
+  .fichas{display:flex;flex-direction:column;gap:16px}
+  .tool{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:clamp(22px,3vw,32px) clamp(22px,3vw,34px);box-shadow:var(--tileShadow)}
+  .tool-top{display:flex;justify-content:space-between;align-items:flex-start;gap:18px 24px;flex-wrap:wrap}
+  .tool-txt{flex:1 1 280px;min-width:0}
+  .tool-badge{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--brand);margin-bottom:10px}
+  .tool-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--brand)}
+  .tool-name{font-size:26px;font-weight:600;letter-spacing:-.015em;line-height:1.2;margin:0}
+  .tool-full{font-size:13.5px;line-height:1.55;color:var(--ink2);margin-top:4px;text-wrap:pretty}
+  .btn-tool{flex:none;display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:600;color:#fff;background:var(--bar);padding:13px 22px;border-radius:6px;white-space:nowrap;transition:background .15s ease}
+  .btn-tool:hover{background:var(--barHover);color:#fff}
+  .tool-desc{font-size:16px;line-height:1.6;color:var(--ink2);max-width:680px;margin:18px 0 0;text-wrap:pretty}
+  .tool-sub{display:flex;flex-wrap:wrap;gap:20px 32px;margin-top:26px;padding-top:24px;border-top:1px solid var(--line)}
+  .tool-sub > div{flex:1 1 220px;min-width:0}
+  .tool-sub-k{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--brand);margin-bottom:8px}
+  .tool-sub-p{font-size:13.5px;line-height:1.55;color:var(--ink2);margin:0;text-wrap:pretty}
+  .vacio{background:var(--surface2);border:1px solid var(--line);border-radius:16px;padding:clamp(22px,3vw,32px) clamp(22px,3vw,34px)}
+  .vacio-k{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink2);margin-bottom:8px}
+  .vacio p{font-size:16px;line-height:1.6;color:var(--ink2);margin:0;max-width:680px;text-wrap:pretty}
+  /* a country's cross-link to the regional view */
+  .cobertura{margin-top:44px}
+  .cobertura-head{padding-top:22px;border-top:1px solid var(--line)}
+  .cobertura-head h4{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ink);margin:0}
+  .cruce{display:flex;align-items:center;gap:18px;margin-top:16px;padding:18px 22px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--tileShadow);color:var(--ink);transition:border-color .15s ease,color .15s ease,box-shadow .2s ease}
+  .cruce:hover{border-color:var(--brand);color:var(--brand);box-shadow:var(--hoverShadow)}
+  .cruce-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+  .cruce-t{font-size:16px;font-weight:600;letter-spacing:-.005em;line-height:1.35;text-wrap:pretty}
+  .cruce-sub{display:flex;align-items:center;gap:7px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink2);font-variant-numeric:tabular-nums}
+  .cruce-arrow{flex:none;font-family:var(--mono);font-size:18px;line-height:1;transition:transform .2s ease;transform:translateX(0)}
+  .cruce:hover .cruce-arrow,.cruce:focus .cruce-arrow{transform:translateX(3px)}
 
   /* metodología / fuentes */
   .doc{background:var(--surface);position:relative;overflow:hidden}
@@ -298,10 +314,8 @@
     .cols3{grid-template-columns:1fr;gap:16px}
     .alianza{padding:28px 24px}
     .slogan p{font-size:22px}
-    .herr .container{padding:44px 22px 48px}
     .doc .container{padding:56px 22px}
     .doc-wm{font-size:76px}
-    .tool-sub{grid-template-columns:1fr;gap:20px}
     .footer .container{padding:40px 22px 26px}
     .footer-grid{grid-template-columns:1fr 1fr;gap:30px}
   }
@@ -482,18 +496,18 @@
   </section>
 
   <!-- ===== HERRAMIENTAS ===== -->
-  <section class="tab-panel herr" id="tab-herramientas">
+  <section class="tab-panel herr" id="tab-herramientas" aria-labelledby="herr-title">
     <div class="container">
       <div class="herr-head">
         <div>
           <div class="herr-eyebrow" data-i18n="herr.eyebrow">Herramientas del observatorio</div>
-          <h2 data-i18n="herr.h2">Explore la colección</h2>
+          <h2 id="herr-title" data-i18n="herr.h2">Explore la colección</h2>
         </div>
         <span class="herr-count" data-catalogo-total></span>
       </div>
-      <!-- El índice (tiles por país + regional + vistas previas) y las vistas por grupo
-           (#herramientas/<grupo>, con las fichas completas) los genera renderCatalogo()
-           a partir de CATALOGO, en el script. Aquí no se escribe ninguna herramienta. -->
+      <!-- El índice (los ocho países como tiles, la región, las vistas previas) y las vistas por
+           grupo (#herramientas/<país>, #herramientas/regional) los genera renderCatalogo() a partir
+           de CATALOGO, en el script. Aquí no se escribe ningún país ni ninguna herramienta. -->
       <div data-catalogo-vistas></div>
     </div>
   </section>
@@ -698,17 +712,39 @@
     };
     // ---- catálogo de herramientas — THE single source ---------------------------
     // Adding a tool or a country means adding ONE entry here. The Herramientas section
-    // (country tiles, the regional tile, every count, the tool cards, the previews) and
-    // the footer's tool list are rendered from it by renderCatalogo() below — nothing
-    // about a tool is written in the markup. Every visible string is { es, en }, or one
-    // string when it reads the same in both languages: renderCatalogo() writes the
-    // Spanish into the DOM and registers the English in I18N_EN, so the page's own
-    // data-i18n mechanism translates the rendered markup like everything else.
-    // The Arroz, ENOS and preview copy below is the page's previous copy, moved here
-    // unchanged. The Vigía SIMPA copy is NEW (September 2026); its English is a draft
-    // PENDING REVIEW, like the tool's own English.
+    // (the eight countries as tiles, the regional tile, every count, every group's view
+    // with its cards or its empty state, the previews) and the footer's tool list are
+    // rendered from it by renderCatalogo() below — nothing about a country or a tool is
+    // written in the markup. Every visible string is { es, en }, or one string when it
+    // reads the same in both languages: renderCatalogo() writes the Spanish into the DOM
+    // and registers the English in I18N_EN, so the page's own data-i18n mechanism
+    // translates the rendered markup like everything else.
+    // The look and the behaviour are those of the Claude Design prototype
+    // (design-handoff/herramientas-design.html, outside this repo): its design-time
+    // knobs are baked in — countries with tools first, then alphabetical; the region
+    // drawn as a stack of its member flags; previews shown; the portal's own dark mode
+    // and hash router instead of the prototype's — and its scale-test sample tools do
+    // not exist here. The one knob kept is SIN_HERRAMIENTAS below.
+    // The Arroz, ENOS and preview copy is the page's previous copy, unchanged. The Vigía
+    // SIMPA copy is NEW (September 2026); its English is a draft PENDING REVIEW.
+
+    // The region's name, in one place (the regional tile, its view, the cross-links).
+    var REGION_NOMBRE = { es: 'Región SICA', en: 'SICA region' };
+    // How countries without published tools appear on the index:
+    //   'tarjetas' — as muted tiles among the others (the prototype's default)
+    //   'compacto' — not as tiles; listed as chips under the grid instead
+    var SIN_HERRAMIENTAS = 'tarjetas';
+
     var CATALOGO = {
+      // the eight SICA countries. `herramientas: []` = nothing published yet: a muted tile
+      // on the index and an empty state in its own view (#herramientas/<id>)
       paises: [
+        { id: 'belice', bandera: 'flags/bz.png', nombre: { es: 'Belice', en: 'Belize' }, herramientas: [] },
+        { id: 'costa-rica', bandera: 'flags/cr.png', nombre: 'Costa Rica', herramientas: [] },
+        { id: 'el-salvador', bandera: 'flags/sv.png', nombre: 'El Salvador', herramientas: [] },
+        { id: 'guatemala', bandera: 'flags/gt.png', nombre: 'Guatemala', herramientas: [] },
+        { id: 'honduras', bandera: 'flags/hn.png', nombre: 'Honduras', herramientas: [] },
+        { id: 'nicaragua', bandera: 'flags/ni.png', nombre: 'Nicaragua', herramientas: [] },
         { id: 'panama', bandera: 'flags/pa.png', nombre: { es: 'Panamá', en: 'Panama' },
           herramientas: [
             { id: 'arroz', nombre: 'Vigía Arroz', url: 'https://arroz.iicapanama.net',
@@ -752,13 +788,14 @@
                   p: { es: 'Quintales perdidos por caída de rendimiento y por reducción de siembra, valorados en balboas a precios de referencia del MIDA.',
                     en: 'Quintals lost to yield drop and to reduced planting, valued in balboas at MIDA reference prices.' } },
               ] }
-          ] }
+          ] },
+        { id: 'republica-dominicana', bandera: 'flags/do.png', nombre: { es: 'República Dominicana', en: 'Dominican Republic' }, herramientas: [] }
       ],
       region: {
-        id: 'regional', nombre: { es: 'Región SICA', en: 'SICA region' },
-        // the eight member countries, drawn as a cluster of their flags (the marquee's
-        // assets). No institutional emblem: none is licensed for this page.
-        miembros: ['sv', 'gt', 'do', 'pa', 'ni', 'bz', 'hn', 'cr'],
+        id: 'regional', nombre: REGION_NOMBRE,
+        // the member countries (ids above), in the order their flags stack — front to back.
+        // No institutional emblem: none is licensed for this page.
+        miembros: ['el-salvador', 'guatemala', 'republica-dominicana', 'panama', 'nicaragua', 'belice', 'honduras', 'costa-rica'],
         herramientas: [
           { id: 'enos', nombre: { es: 'Simulador ENOS',
               en: 'ENSO Simulator' }, url: 'https://simulador-enos.iicapanama.net',
@@ -794,127 +831,168 @@
             en: 'Regional dashboard that combines the ENSO climate signal with agrifood monitoring across Central America and the Dominican Republic, developed by IICA. It is a prototype under construction, published for review — it does not replace official information.' } }
       ]
     };
-    // Section labels and plurals, both languages. Counts are never written by hand.
+    // Section labels, both languages. Counts are never written by hand (renderCatalogo()).
+    // EN of the strings marked (new) is a draft PENDING REVIEW — the prototype is Spanish-only.
+    // So is the English composed inline in renderCatalogo(): the card and demo aria-labels
+    // ("… (opens in a new tab)"), the "N of M countries with published tools" meta, the
+    // empty-state sentence, the cross-link line ("X is (also) part of the SICA region") and
+    // "regional tool(s)".
     var CAT_STR = {
-      porPais: { es: 'Por país',
-          en: 'By country' }, regional: 'Regional',
-      conHerr: { es: 'con herramientas publicadas',
-          en: 'with published tools' },
-      enRevision: { es: 'en revisión',
-          en: 'under review' },
-      previas: { es: 'Vistas previas',
-          en: 'Previews' },
+      porPais: { es: 'Por país', en: 'By country' }, regional: 'Regional',
+      previas: { es: 'Vistas previas', en: 'Previews' },
       previasNota: { es: 'Prototipos en desarrollo, abiertos para revisión. No son herramientas oficiales del observatorio: los datos y el diseño todavía pueden cambiar.',
           en: 'Prototypes under development, open for review. They are not official tools of the observatory: data and design may still change.' },
-      badge: { es: 'Herramienta activa',
-          en: 'Active tool' }, demoBadge: { es: 'Demostración · Vista previa',
-          en: 'Demo · Preview' }, demoAbrir: { es: 'Ver la demostración',
-          en: 'View the demo' },
-      volver: { es: 'Todos los países',
-          en: 'All countries' },
-      plural: { herramienta: { es: ['herramienta', 'herramientas'], en: ['tool', 'tools'] },
-                pais: { es: ['país', 'países'], en: ['country', 'countries'] },
-                prototipo: { es: ['prototipo', 'prototipos'], en: ['prototype', 'prototypes'] } }
+      conHerr: { es: 'con herramientas publicadas', en: 'with published tools' },
+      enRevision: { es: 'en revisión', en: 'under review' },
+      sinHerr: { es: 'Sin herramientas publicadas', en: 'No published tools' },          // (new)
+      miembros: { es: 'Países miembros', en: 'Member countries' },                     // (new)
+      irA: { es: 'Ir a', en: 'Jump to' },                                              // (new)
+      cobertura: { es: 'Cobertura regional', en: 'Regional coverage' },                // (new)
+      badge: { es: 'Herramienta activa', en: 'Active tool' },
+      demoBadge: { es: 'Demostración · Vista previa', en: 'Demo · Preview' },
+      demoAbrir: { es: 'Ver la demostración', en: 'View the demo' },
+      volver: { es: 'Todos los países', en: 'All countries' }
     };
-    var VISTAS = []; // the level-2 views' ids (#herramientas/<id>), filled by renderCatalogo()
+    var VISTAS = []; // the level-2 views' ids (#herramientas/<id>): every country and the region
 
     // Renders the Herramientas section and the footer's tool list from CATALOGO. Runs once,
     // before initLang(), so cacheOriginals() captures the Spanish and applyLang() finds the
     // English it registered. Views are all in the DOM from the start; showTab() only toggles
     // [hidden] on them, so switching view re-renders nothing and translation just works.
+    // The element tree is the prototype's, tag for tag (classes added; a <span> around a
+    // text that shares its parent with another element, so data-i18n can replace it).
+    // The English composed below is a draft PENDING REVIEW — see the note above CAT_STR.
     function renderCatalogo() {
       var esc = function (v) { return String(v).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
       var T = function (v, lang) { return typeof v === 'string' ? v : v[lang]; };
-      // the data-i18n hook: the Spanish goes into the DOM now, the English into I18N_EN
+      var N = function (x) { return typeof x.nombre === 'string' ? { es: x.nombre, en: x.nombre } : x.nombre; };
+      // the data-i18n hooks: the Spanish goes into the DOM now, the English into I18N_EN
       var reg = function (key, v) { I18N_EN[key] = T(v, 'en'); return ' data-i18n="' + key + '"'; };
+      var regA = function (attr, key, v) { I18N_EN[key] = T(v, 'en'); return ' ' + attr + '="' + esc(T(v, 'es')) + '" data-i18n-attr="' + attr + ':' + key + '"'; };
       var tx = function (tag, cls, key, v, extra) {
         return '<' + tag + (cls ? ' class="' + cls + '"' : '') + (extra || '') + reg(key, v) + '>' + esc(T(v, 'es')) + '</' + tag + '>';
       };
-      var cuenta = function (k, n) {
-        var p = CAT_STR.plural[k];
-        return { es: n + ' ' + p.es[n === 1 ? 0 : 1], en: n + ' ' + p.en[n === 1 ? 0 : 1] };
-      };
+      var pl = function (n, es1, esN, en1, enN) { return { es: n + ' ' + (n === 1 ? es1 : esN), en: n + ' ' + (n === 1 ? en1 : enN) }; };
+      var nHerr = function (n) { return pl(n, 'herramienta', 'herramientas', 'tool', 'tools'); };
+      var nPais = function (n) { return pl(n, 'país', 'países', 'country', 'countries'); };
       var join = function (a, b, sep) { return { es: a.es + sep + b.es, en: a.en + sep + b.en }; };
-
-      var paises = CATALOGO.paises, region = CATALOGO.region, demos = CATALOGO.demos;
+      var S = CAT_STR, paises = CATALOGO.paises, region = CATALOGO.region, demos = CATALOGO.demos;
+      var byId = {}; paises.forEach(function (p) { byId[p.id] = p; });
+      var porNombre = function (a, b) { return N(a).es.localeCompare(N(b).es, 'es'); };
+      // orden «activos»: the countries with tools first, then alphabetical (Spanish names)
+      var ordenados = paises.slice().sort(function (a, b) { return ((b.herramientas.length > 0) - (a.herramientas.length > 0)) || porNombre(a, b); });
+      var activos = ordenados.filter(function (p) { return p.herramientas.length > 0; });
+      var compacto = SIN_HERRAMIENTAS === 'compacto';
       var grupos = paises.concat([region]);
       var total = grupos.reduce(function (n, g) { return n + g.herramientas.length; }, 0);
-      var nMiembros = region.miembros.length;
+      var nReg = region.herramientas.length, nm = region.miembros.length;
+      var miembros = region.miembros.map(function (id) { return byId[id]; });
       grupos.forEach(function (g) { VISTAS.push(g.id); });
 
-      var bandera = function (src) { return '<img class="tile-flag" src="' + esc(src) + '" alt="">'; };
-      var cluster = function () {
-        return '<span class="tile-cluster" aria-hidden="true">' + region.miembros.map(function (m) {
-          return '<img src="flags/' + m + '.png" alt="">';
+      var flag = function (p, cls, extra) { return '<img' + (cls ? ' class="' + cls + '"' : '') + ' src="' + esc(p.bandera) + '" alt=""' + (extra || '') + '>'; };
+      // the region's mark: the member flags stacked front to back, at 48 / 39 / 30 px wide
+      var pila = function (w) {
+        var paso = { 48: 7, 39: 6, 30: 5 }[w];
+        return '<span class="pila pila-' + w + '" aria-hidden="true">' + miembros.map(function (m, i) {
+          return flag(m, '', ' style="left:' + (i * paso) + 'px"' + regA('title', 'cat.pais.' + m.id + '.nombre', N(m)));
         }).join('') + '</span>';
       };
-      var cuentaDe = function (g) {
-        var c = cuenta('herramienta', g.herramientas.length);
-        return g === region ? join(c, cuenta('pais', nMiembros), ' · ') : c;
+      var punto = '<span class="punto"></span>';
+      var arrow = function (cls) { return '<span class="' + cls + '" aria-hidden="true">→</span>'; };
+      var tileActivo = function (p) {
+        var k = 'cat.pais.' + p.id + '.', nom = N(p), cnt = nHerr(p.herramientas.length);
+        return '<a class="tile" href="#herramientas/' + p.id + '" data-pais="' + p.id + '" data-tab="herramientas" data-sub="' + p.id + '"' + regA('aria-label', k + 'aria', join(nom, cnt, ': ')) + '>' +
+          flag(p, 'tile-flag') + tx('span', 'tile-name tile-name-pais', k + 'nombre', nom) +
+          '<span class="tile-count">' + punto + tx('span', 'txt', k + 'cuenta', cnt) + '</span>' + arrow('tile-arrow') + '</a>';
       };
-      var tile = function (g, media) {
-        var k = 'cat.grp.' + g.id + '.';
-        return '<a class="tile" href="#herramientas/' + g.id + '" data-tab="herramientas" data-sub="' + g.id + '">' +
-          '<span class="tile-media">' + media + '</span>' +
-          tx('span', 'tile-name', k + 'nombre', g.nombre) +
-          tx('span', 'tile-count', k + 'cuenta', cuentaDe(g)) +
-          '<span class="tile-arrow mono" aria-hidden="true">→</span></a>';
+      var tileVacio = function (p) {
+        var k = 'cat.pais.' + p.id + '.';
+        return '<div class="tile-vacio">' + flag(p, 'tile-flag') + tx('span', 'tile-name tile-name-pais', k + 'nombre', N(p)) + tx('span', 'tile-sin', 'cat.sinHerr', S.sinHerr) + '</div>';
       };
-      var ficha = function (t) {
-        var k = 'cat.' + t.id + '.';
-        var nombre = typeof t.nombre === 'string' ? '<div class="tool-name">' + esc(t.nombre) + '</div>' : tx('div', 'tool-name', k + 'nombre', t.nombre);
-        var largo = t.nombreLargo ? tx('div', 'tool-full', k + 'largo', t.nombreLargo) : '';
-        return '<div class="tool">' +
-          '<div class="tool-top"><div>' +
-            '<div class="tool-badge"><span class="dot"></span>' + tx('span', '', 'cat.badge', CAT_STR.badge) + '</div>' +
-            nombre + largo +
-          '</div>' +
-          '<a class="btn-tool" href="' + esc(t.url) + '" target="_blank" rel="noopener">' + tx('span', '', k + 'abrir', t.abrir) + ' <span class="mono">→</span></a></div>' +
-          tx('p', 'tool-desc', k + 'desc', t.desc) +
-          '<div class="tool-sub">' + t.sub.map(function (sub, i) {
-            var ks = k + 's' + (i + 1) + '.';
-            return '<div>' + tx('div', 'tool-sub-k', ks + 'k', sub.k) + tx('p', 'tool-sub-p', ks + 'p', sub.p) + '</div>';
-          }).join('') + '</div></div>';
+      var regionCuenta = join(nHerr(nReg), nPais(nm), ' · ');
+      var tileRegion = function () {
+        return '<a class="tile" href="#herramientas/regional" data-pais="regional" data-tab="herramientas" data-sub="regional"' + regA('aria-label', 'cat.region.aria', join(REGION_NOMBRE, regionCuenta, ': ')) + '>' +
+          pila(48) + tx('span', 'tile-name', 'cat.region.nombre', REGION_NOMBRE) +
+          '<span class="tile-count">' + punto + tx('span', 'txt', 'cat.region.cuenta', regionCuenta) + '</span>' + arrow('tile-arrow') + '</a>';
+      };
+      // a member country: a link into its view when it has tools, a plain chip when it has none
+      var chip = function (p) {
+        var k = 'cat.pais.' + p.id + '.';
+        return p.herramientas.length
+          ? '<a class="chip chip-link" href="#herramientas/' + p.id + '" data-tab="herramientas" data-sub="' + p.id + '">' + flag(p) + tx('span', '', k + 'nombre', N(p)) + arrow('mono-arrow') + '</a>'
+          : '<span class="chip">' + flag(p) + tx('span', '', k + 'nombre', N(p)) + '</span>';
+      };
+      var grpHead = function (key, titulo, meta, cls) {
+        return '<div class="grp-head' + (cls ? ' ' + cls : '') + '">' + tx('h3', 'grp-k', key, titulo) + tx('span', 'grp-meta', key + 'Meta', meta) + '</div>';
       };
       var demo = function (d) {
-        var k = 'cat.demo.' + d.id + '.';
-        return '<div class="tool tool-demo"><div class="tool-top"><div>' +
-          tx('div', 'demo-badge', 'cat.demoBadge', CAT_STR.demoBadge) +
-          tx('div', 'tool-name', k + 'nombre', d.nombre) + '</div>' +
-          '<a class="btn-demo" href="' + esc(d.url) + '" target="_blank" rel="noopener">' + tx('span', '', 'cat.demoAbrir', CAT_STR.demoAbrir) + ' <span class="mono" aria-hidden="true">→</span></a></div>' +
-          tx('p', 'tool-desc', k + 'desc', d.desc) + '</div>';
+        var k = 'cat.demo.' + d.id + '.', nom = N(d);
+        return '<div class="tool-demo"><div class="demo-top"><div class="demo-txt">' + tx('div', 'demo-badge', 'cat.demoBadge', S.demoBadge) + tx('div', 'demo-name', k + 'nombre', nom) + '</div>' +
+          '<a class="btn-demo" href="' + esc(d.url) + '" target="_blank" rel="noopener"' + regA('aria-label', k + 'aria', { es: 'Ver la demostración: ' + nom.es + ' (se abre en una pestaña nueva)', en: 'View the demo: ' + nom.en + ' (opens in a new tab)' }) + '>' + tx('span', '', 'cat.demoAbrir', S.demoAbrir) + arrow('mono-arrow') + '</a></div>' +
+          tx('p', 'demo-desc', k + 'desc', d.desc) + '</div>';
       };
-      var grpHead = function (key, titulo, meta) {
-        return '<div class="grp-head">' + tx('h3', 'grp-k', key, titulo) + tx('span', 'grp-meta', key + 'Meta', meta) + '</div>';
+      var ficha = function (g, t, i) {
+        var k = 'cat.' + t.id + '.', nom = N(t);
+        return '<article class="tool" id="herr-' + g.id + '-' + i + '"><div class="tool-top"><div class="tool-txt">' +
+          '<div class="tool-badge"><span class="dot"></span>' + tx('span', '', 'cat.badge', S.badge) + '</div>' +
+          tx('h4', 'tool-name', k + 'nombre', nom) + (t.nombreLargo ? tx('div', 'tool-full', k + 'largo', t.nombreLargo) : '') + '</div>' +
+          '<a class="btn-tool" href="' + esc(t.url) + '" target="_blank" rel="noopener"' + regA('aria-label', k + 'aria', { es: 'Abrir ' + nom.es + ' (se abre en una pestaña nueva)', en: 'Open ' + nom.en + ' (opens in a new tab)' }) + '>' + tx('span', '', k + 'abrir', t.abrir) + arrow('mono-arrow') + '</a></div>' +
+          tx('p', 'tool-desc', k + 'desc', t.desc) +
+          '<div class="tool-sub">' + t.sub.map(function (sub, j) {
+            var ks = k + 's' + (j + 1) + '.';
+            return '<div>' + tx('div', 'tool-sub-k', ks + 'k', sub.k) + tx('p', 'tool-sub-p', ks + 'p', sub.p) + '</div>';
+          }).join('') + '</div></article>';
       };
 
-      // level 1 — the index: country tiles, the regional tile, the previews
+      // level 1 — the index: every country as a tile (or the active ones plus chips), the
+      // region, the previews
+      var paisesMeta = activos.length === paises.length
+        ? join(nPais(activos.length), S.conHerr, ' ')
+        : { es: activos.length + ' de ' + paises.length + ' países con herramientas publicadas', en: activos.length + ' of ' + paises.length + ' countries with published tools' };
+      var vacios = compacto ? ordenados.filter(function (p) { return !p.herramientas.length; }) : [];
       var indice = '<div class="herr-vista" data-vista="">' +
-        '<div class="grp">' + grpHead('cat.porPais', CAT_STR.porPais, join(cuenta('pais', paises.length), CAT_STR.conHerr, ' ')) +
-          '<div class="tiles">' + paises.map(function (p) { return tile(p, bandera(p.bandera)); }).join('') + '</div></div>' +
-        '<div class="grp">' + grpHead('cat.regional', CAT_STR.regional, join(cuenta('herramienta', region.herramientas.length), { es: nMiembros + ' países SICA', en: nMiembros + ' SICA countries' }, ' · ')) +
-          '<div class="tiles">' + tile(region, cluster()) + '</div></div>' +
-        '<div class="grp">' + grpHead('cat.previas', CAT_STR.previas, join(cuenta('prototipo', demos.length), CAT_STR.enRevision, ' ')) +
-          tx('p', 'grp-note', 'cat.previasNota', CAT_STR.previasNota) +
-          '<div class="demos">' + demos.map(demo).join('') + '</div></div>' +
+        '<div class="grp">' + grpHead('cat.porPais', S.porPais, paisesMeta) +
+          '<div class="tiles">' + (compacto ? activos : ordenados).map(function (p) { return p.herramientas.length ? tileActivo(p) : tileVacio(p); }).join('') + '</div>' +
+          (vacios.length ? '<div class="chips chips-vacios">' + tx('span', 'chips-k', 'cat.sinHerr', S.sinHerr) + vacios.map(chip).join('') + '</div>' : '') +
+        '</div>' +
+        '<div class="grp">' + grpHead('cat.regional', S.regional, { es: nHerr(nReg).es + ' · ' + nm + ' países SICA', en: nHerr(nReg).en + ' · ' + nm + ' SICA countries' }) +
+          '<div class="tiles">' + tileRegion() + '</div></div>' +
+        (demos.length ? '<div class="grp">' + grpHead('cat.previas', S.previas, join(pl(demos.length, 'prototipo', 'prototipos', 'prototype', 'prototypes'), S.enRevision, ' '), 'grp-head-demos') +
+          tx('p', 'grp-note', 'cat.previasNota', S.previasNota) + '<div class="demos">' + demos.map(demo).join('') + '</div></div>' : '') +
         '</div>';
-      // level 2 — one view per group: the way back, the group's row, the full cards
-      var vista = function (g, media) {
-        var k = 'cat.grp.' + g.id + '.';
-        return '<div class="herr-vista" data-vista="' + g.id + '" hidden>' +
-          '<a class="btn-demo volver" href="#herramientas" data-tab="herramientas"><span class="mono" aria-hidden="true">←</span> ' + tx('span', '', 'cat.volver', CAT_STR.volver) + '</a>' +
-          '<div class="pais-head">' + media + tx('h3', 'pais-name', k + 'nombre', g.nombre) +
-            '<span class="pais-rule" aria-hidden="true"></span>' + tx('span', 'pais-count', k + 'cuenta', cuentaDe(g)) + '</div>' +
-          '<div class="fichas">' + g.herramientas.map(ficha).join('') + '</div></div>';
+      // level 2 — one view per country and for the region: the way back, the group's row,
+      // (region) its member chips, (4+ tools) a jump list, the cards or the empty state,
+      // (country) the cross-link to the region
+      var vista = function (g) {
+        var esRegion = g === region, k = esRegion ? 'cat.region.' : 'cat.pais.' + g.id + '.', nom = N(g), n = g.herramientas.length;
+        var cnt = esRegion ? regionCuenta : (n ? nHerr(n) : S.sinHerr);
+        var out = '<div class="herr-vista" data-vista="' + g.id + '" hidden>' +
+          '<a class="volver" href="#herramientas" data-tab="herramientas"><span class="mono-arrow" aria-hidden="true">←</span>' + tx('span', '', 'cat.volver', S.volver) + '</a>' +
+          '<div class="pais-head">' + (esRegion ? pila(39) : flag(g, 'pais-flag')) + tx('h3', 'pais-name', k + 'nombre', nom, ' tabindex="-1"') +
+            '<span class="pais-rule" aria-hidden="true"></span>' + tx('span', 'pais-count', k + 'cuentaVista', cnt) + '</div>';
+        if (esRegion) out += '<div class="chips chips-miembros">' + tx('span', 'chips-k', 'cat.miembros', S.miembros) + miembros.slice().sort(porNombre).map(chip).join('') + '</div>';
+        if (n >= 4) out += '<div class="chips saltos">' + tx('span', 'chips-k', 'cat.irA', S.irA) + g.herramientas.map(function (t, i) {
+          return '<button type="button" class="salto" data-salto="herr-' + g.id + '-' + i + '"' + reg('cat.' + t.id + '.nombre', N(t)) + '>' + esc(N(t).es) + '</button>';
+        }).join('') + '</div>';
+        if (n) out += '<div class="fichas">' + g.herramientas.map(function (t, i) { return ficha(g, t, i); }).join('') + '</div>';
+        else out += '<div class="vacio">' + tx('div', 'vacio-k', 'cat.sinHerr', S.sinHerr) +
+          tx('p', '', k + 'vacio', { es: 'Todavía no hay herramientas publicadas para ' + nom.es + '.', en: 'There are no published tools for ' + nom.en + ' yet.' }) + '</div>';
+        if (!esRegion) {
+          var linea = { es: nom.es + ' ' + (n ? 'también forma' : 'forma') + ' parte de la ' + REGION_NOMBRE.es, en: nom.en + ' is ' + (n ? 'also ' : '') + 'part of the ' + REGION_NOMBRE.en };
+          out += '<div class="cobertura"><div class="cobertura-head">' + tx('h4', '', 'cat.cobertura', S.cobertura) + '</div>' +
+            '<a class="cruce" href="#herramientas/regional" data-tab="herramientas" data-sub="regional">' + pila(30) +
+            '<span class="cruce-txt">' + tx('span', 'cruce-t', k + 'linea', linea) +
+              '<span class="cruce-sub">' + punto + tx('span', 'txt', 'cat.region.cruce', pl(nReg, 'herramienta regional', 'herramientas regionales', 'regional tool', 'regional tools')) + '</span></span>' +
+            arrow('cruce-arrow') + '</a></div>';
+        }
+        return out + '</div>';
       };
-      var vistas = paises.map(function (p) { return vista(p, '<img class="pais-flag" src="' + esc(p.bandera) + '" alt="" width="39" height="26">'); })
-        .concat([vista(region, cluster())]);
 
       var host = document.querySelector('[data-catalogo-vistas]');
-      if (host) host.innerHTML = indice + vistas.join('');
+      if (host) host.innerHTML = indice + grupos.map(vista).join('');
       var count = document.querySelector('[data-catalogo-total]');
       if (count) {
-        var tot = { es: total + (total === 1 ? ' herramienta activa' : ' herramientas activas'), en: total + (total === 1 ? ' active tool' : ' active tools') };
+        var tot = pl(total, 'herramienta activa', 'herramientas activas', 'active tool', 'active tools');
         count.setAttribute('data-i18n', 'cat.total'); I18N_EN['cat.total'] = tot.en; count.textContent = tot.es;
       }
       // footer — every active tool, countries first, then the regional ones
@@ -923,9 +1001,8 @@
         var lis = [];
         grupos.forEach(function (g) {
           g.herramientas.forEach(function (t) {
-            var nombre = typeof t.nombre === 'string' ? esc(t.nombre) : esc(t.nombre.es);
             var attr = typeof t.nombre === 'string' ? '' : ' data-i18n="cat.' + t.id + '.nombre"';
-            lis.push('<li><a href="' + esc(t.url) + '" target="_blank" rel="noopener"' + attr + '>' + nombre + '</a></li>');
+            lis.push('<li><a href="' + esc(t.url) + '" target="_blank" rel="noopener"' + attr + '>' + esc(N(t).es) + '</a></li>');
           });
         });
         foot.insertAdjacentHTML('afterbegin', lis.join(''));
@@ -935,6 +1012,7 @@
     function cacheOriginals() {
       document.querySelectorAll('[data-i18n]').forEach(function (el) { _orig['t:' + el.getAttribute('data-i18n')] = el.textContent; });
       document.querySelectorAll('[data-i18n-html]').forEach(function (el) { _orig['h:' + el.getAttribute('data-i18n-html')] = el.innerHTML; });
+      document.querySelectorAll('[data-i18n-attr]').forEach(function (el) { var p = el.getAttribute('data-i18n-attr').split(':'); _orig['a:' + p[1]] = el.getAttribute(p[0]); });
     }
     function applyLang(lang) {
       if (lang !== 'en') lang = 'es';
@@ -948,6 +1026,12 @@
         var k = el.getAttribute('data-i18n-html');
         var v = (lang === 'en') ? I18N_EN[k] : _orig['h:' + k];
         if (v != null) el.innerHTML = v;
+      });
+      // attributes (the tiles' aria-labels, the stacked flags' titles): data-i18n-attr="attr:key"
+      document.querySelectorAll('[data-i18n-attr]').forEach(function (el) {
+        var p = el.getAttribute('data-i18n-attr').split(':');
+        var v = (lang === 'en') ? I18N_EN[p[1]] : _orig['a:' + p[1]];
+        if (v != null) el.setAttribute(p[0], v);
       });
       document.documentElement.style.setProperty('--soon', "'" + (lang === 'en' ? (I18N_EN['soon'] || 'soon') : 'pronto') + "'");
       var label = document.querySelector('[data-lang-label]');
@@ -1004,6 +1088,18 @@
           var vista = document.querySelector('.herr-vista[data-vista="' + currentSub + '"]');
           var dest = vista && (currentSub ? vista.querySelector('.volver') : vista.querySelector('.tile[data-sub="' + prevSub + '"]'));
           if (dest) dest.focus();
+        }
+        return;
+      }
+      // the jump list of a view with four or more tools: scroll the card into view, below
+      // the two sticky bars (the prototype has none, so it stops 24 px above the card)
+      var j = e.target.closest('[data-salto]');
+      if (j) {
+        var card = document.getElementById(j.getAttribute('data-salto'));
+        if (card) {
+          var fijo = 0;
+          document.querySelectorAll('.header, .subnav').forEach(function (b) { fijo += b.getBoundingClientRect().height; });
+          window.scrollTo({ top: card.getBoundingClientRect().top + window.scrollY - fijo - 24, behavior: 'smooth' });
         }
         return;
       }
