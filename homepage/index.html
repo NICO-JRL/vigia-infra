@@ -997,20 +997,26 @@
             en: 'ENSO Regional Agrifood Dashboard 2026–2027' }, url: 'https://enos.iicapanama.net',
           desc: { es: 'Panel regional que integra la señal climática del ENOS con el seguimiento agroalimentario de Centroamérica y República Dominicana, desarrollado por el IICA. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.',
             en: 'Regional dashboard that combines the ENSO climate signal with agrifood monitoring across Central America and the Dominican Republic, developed by IICA. It is a prototype under construction, published for review — it does not replace official information.' } },
-        // FitoVisión Panamá — in Panamá and in Extensión digital (one entry); EN draft pending review
+        // FitoVisión — one demo per crop group (decided 19/10/2026), each in Panamá and in Extensión
+        // digital (one entry, two groups). Descriptions from each tool's own text (22/10/2026);
+        // EN drafts pending review
         { id: 'fitovision', grupos: ['panama', 'extension-digital'], demo: true,
-          nombre: { es: 'FitoVisión Panamá · Maíz y arroz',
-            en: 'FitoVisión Panamá · Maize and rice' }, url: 'https://fitovision.iicapanama.net',
-          desc: { es: 'Herramienta de diagnóstico en campo para maíz y arroz en Panamá: a partir de los síntomas que se observan en la planta y de su etapa de desarrollo, indica el problema más probable, su nivel de riesgo y qué hacer; el diagnóstico por foto llegará próximamente. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.',
-            en: 'Field diagnosis tool for maize and rice in Panama: from the symptoms seen on the plant and its growth stage, it points to the most likely problem, its risk level and what to do; photo diagnosis is coming soon. It is a prototype under construction, published for review — it does not replace official information.' } },
-        // not published yet (no link): kept here, shown nowhere. Before adding a link, add
-        // `desc` (ES/EN) — a card without one shows only its name and its button.
+          nombre: { es: 'FitoVisión Cereales · Maíz y arroz',
+            en: 'FitoVisión Cereales · Maize and rice' }, url: 'https://fitovision.iicapanama.net',
+          desc: { es: 'Diagnóstico fitosanitario y nutricional de maíz y arroz para productores de Panamá: a partir de los síntomas que se observan en campo, sobre una planta en 3D, indica el problema más probable y qué hacer, con cálculo de abono paso a paso e informe en PDF; el diagnóstico por foto llegará próximamente. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.',
+            en: 'Plant-health and nutrition diagnosis of maize and rice for producers in Panama: from the symptoms seen in the field, on a 3D plant, it points to the most likely problem and what to do, with step-by-step fertiliser calculations and a PDF report; photo diagnosis is coming soon. It is a prototype under construction, published for review — it does not replace official information.' } },
         { id: 'fitovision-ccc', grupos: ['panama', 'extension-digital'], demo: true,
-          nombre: { es: 'FitoVisión · Cacao, café y caña de azúcar',
-            en: 'FitoVisión · Cocoa, coffee and sugarcane' }, url: '' },
-        { id: 'terrasat', grupos: ['panama'], demo: true, nombre: 'TerraSAT', url: '' },
+          nombre: { es: 'FitoVisión Cultivos tropicales · Cacao, café y caña de azúcar',
+            en: 'FitoVisión Cultivos tropicales · Cocoa, coffee and sugarcane' }, url: 'https://fitovision-tropicales.iicapanama.net',
+          desc: { es: 'Diagnóstico fitosanitario y nutricional de cacao, café y caña de azúcar en Panamá: a partir de los síntomas que se observan en una planta en 3D y de los conteos en campo, orienta sobre el problema más probable y su nivel frente al umbral, con calculadora de fertilización con las fórmulas del MIDA, productos usados en Panamá e informe en PDF; el diagnóstico por foto llegará próximamente. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.',
+            en: 'Plant-health and nutrition diagnosis of cocoa, coffee and sugarcane in Panama: from the symptoms seen on a 3D plant and field counts, it points to the most likely problem and its level against the threshold, with a fertiliser calculator using MIDA’s formulas, products used in Panama and a PDF report; photo diagnosis is coming soon. It is a prototype under construction, published for review — it does not replace official information.' } },
+        { id: 'terrasat', grupos: ['panama'], demo: true, nombre: 'TerraSAT', url: 'https://terrasat.iicapanama.net',
+          desc: { es: 'El productor elige provincia, región y cultivo, y ve en una sola pantalla cuánto se produce en su provincia, el clima del momento y lo normal del mes, El Niño y la lluvia de los últimos 30 días y el riesgo climático del Atlas de MiAmbiente para su cultivo, con recomendaciones y un informe en PDF. Es un prototipo en construcción, publicado para revisión — no sustituye información oficial.',
+            en: 'Producers choose a province, region and crop and see on one screen how much is produced in their province, the current weather and the month’s normal, El Niño and the last 30 days of rain, and MiAmbiente’s Climate Risk Atlas for their crop, with recommendations and a PDF report. It is a prototype under construction, published for review — it does not replace official information.' } },
         // Capacitación: Chelsea's courses, starting with AgroAprende (a demo, like the others)
-        { id: 'agroaprende', grupos: ['capacitacion'], demo: true, nombre: 'AgroAprende', url: '' }
+        { id: 'agroaprende', grupos: ['capacitacion'], demo: true, nombre: 'AgroAprende', url: 'https://agroaprende.iicapanama.net',
+          desc: { es: 'Cartillas interactivas de las Escuelas de Campo del IICA Panamá: cuatro módulos de agricultura urbana (introducción, siembra y manejo del huerto, del huerto a la cosecha y el emprendimiento, hidroponía y agricultura protegida), cada uno con un quiz que habilita el siguiente. Es un prototipo en construcción, publicado para revisión.',
+            en: 'Interactive primers from IICA Panama’s Field Schools: four urban-agriculture modules (introduction, planting and managing the garden, from garden to harvest and enterprise, hydroponics and protected agriculture), each with a quiz that unlocks the next. It is a prototype under construction, published for review.' } }
       ]
     };
     // Section labels, both languages. Counts are never written by hand (renderCatalogo()).
